@@ -1,0 +1,18 @@
+2006-09-28    <verzani@math.csi.cuny.edu>
+
+	* R/pmg.R: added pmg.eval() to allow interaction with Commands tab.
+	Added pmg.addMenubar() for adding to menubar. Fixed pmg.gw() for
+	adding to dialog notebook with ggenericwidget
+
+	* R/dLatticeExplorer.R: Put in check so that conditioned plots
+	don't try to draw too many panels
+
+2006-09-26    <verzani@math.csi.cuny.edu>
+
+	* R/quantileWidget.R: Added this function. Goal is to abstract
+	elements to make good widgets for beginning students
+
+	* R/dSummaryDialog.R: Added yVar enabled, fixed bug with uni/bi
+	variate; added a new clear button
+
+

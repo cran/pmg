@@ -1,0 +1,5 @@
+version 0-15
+* removed ilatticeexplorer notebook tab -- device stuff made it
+  confusing, and it didn't work well under windows
+version 0-14
+* added dSummaryDialog and updated menus

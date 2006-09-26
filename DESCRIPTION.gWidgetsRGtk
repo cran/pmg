@@ -1,0 +1,13 @@
+Package: pmg
+Version: 0.9-21
+Date: 2006-08-08
+Title: Poor Man's GUI
+Author: John Verzani
+Maintainer: John Verzani <pmgrgui@gmail.com>
+Depends: RGtk2, gWidgetsRGtk
+Description: Simple GUI for R using RGtk2 and gWidgetsRGtk
+License: GPL version 2 or newer (???)
+URL: http://www.math.csi.cuny.edu/pmg
+LazyLoad: FALSE
+SaveImage: TRUE
+
