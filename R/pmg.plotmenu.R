@@ -131,6 +131,51 @@ par.onfigures.list = list(
 ##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ## Univariate
 
+barplot.list = list(
+  title = "univariate barplot()",
+  help = "barplot",
+  type = "graphic",                      # either text or graphic
+  variableType = "univariatetable",
+  variableTypeExtra = list(name="xlabel",value="height"),
+  action = list(
+    beginning = "barplot(",
+    ending = ")"
+    ),
+  arguments = list(
+    adjustments = list(
+      width=list(
+        type = "gedit",
+        text = "1",
+        coerce.with=as.numeric
+        ),
+      horiz= FALSE.list
+      ),
+    labels = labels.list
+    )
+  )
+
+piechart.list = list(
+  title = "pie()",
+  help = "pie",
+  type = "graphic",                      # either text or graphic
+  variableType = "univariatetable",
+  action = list(
+    beginning = "pie(",
+    ending = ")"
+    ),
+  arguments = list(
+    adjustments = list(
+      labels=list(
+        type = "gedit",
+        text = "names(x)"
+        ),
+      clockwise= FALSE.list
+      ),
+    labels = labels.list
+    )
+  )
+
+
 univariate.boxplot.list = list(
   title = "boxplot()",
   help = "boxplot",
@@ -545,10 +590,6 @@ stripchart.list = list(
       x = list(
         type="geditnamedlist",
         text = ""
-        ),
-      label = list(
-        type = "glabel",
-        text = "Drag variable(s) into x area."
         )
       ),
     arguments = list(                   # types in genericWidget

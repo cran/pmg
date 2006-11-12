@@ -1,3 +1,21 @@
+2007-02-14  John Verzani  <jverzani@gmail.com>
+
+	* R/dHtest.R: fixed issue iwth x~f and alternative
+
+2007-02-13  John Verzani  <jverzani@gmail.com>
+
+	* R/dHtest.R: added formulas for the t-test.
+
+2007-02-06  John Verzani  <jverzani@gmail.com>
+
+	* R/misc.R: fixed pmgSummary -- getStockIconFromClass (not
+		  Object). These functions are no longer exported from
+			  gWidgetsRGtk2, but rather live in pmg.
+
+2006-10-20    <verzani@math.csi.cuny.edu>
+
+	* R/pmg.installCRANPackage.R: bug with res[1,4] fixed
+
 2006-09-28    <verzani@math.csi.cuny.edu>
 
 	* R/pmg.R: added pmg.eval() to allow interaction with Commands tab.

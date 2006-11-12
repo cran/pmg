@@ -14,7 +14,7 @@
 
 }
 \usage{
-pmg(cliType="console",  width=750, height=.75*width,guiToolkit=getOption("guiToolkit"))
+pmg(cliType="console",  width=850, height=.75*width,guiToolkit=getOption("guiToolkit"))
 
 pmg.add(widget,label)
 

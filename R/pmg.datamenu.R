@@ -30,7 +30,7 @@ table.list = list(
     ),
   variableType = "bivariate",
   type = "text",                      # either text or graphic
-  assignto = NULL,
+  assignto = TRUE,
   arguments = list(
     arguments = list(
       exclude = list(
@@ -57,11 +57,6 @@ xtabs.list = list(
   assignto = TRUE,
   arguments = list(
     arguments = list(
-      exclude = list(
-        type="gradio",
-        index = FALSE,
-        items = "c(NA,NaN)"
-        ),
       drop.unused.levels = FALSE.list
       )
     )
@@ -789,7 +784,7 @@ data.frame.list = list(
     )
   )
 
-as.data.frame..list =list(
+as.data.frame.list =list(
   title = "as.data.frame()",
   help = "as.data.frame",
   action = list(

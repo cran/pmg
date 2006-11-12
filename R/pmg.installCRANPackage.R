@@ -5,30 +5,26 @@ pmg.chooseCRANmirror = function(widget = NULL, doing.first=FALSE,...) {
   ## copied from tcltk widget
 
   ## if doing.first == TRUE, then call pmg.installCRANPackage after click
-  
-  m <- read.csv(file.path(R.home(), "doc", "CRAN_mirrors.csv"), as.is = TRUE)
+  ## This is from packages.R in chooseCRANmirror
+  m <- try(read.csv(url("http://cran.r-project.org/CRAN_mirrors.csv"),
+                    as.is=TRUE))
+  if(inherits(m, "try-error"))
+    m <- read.csv(file.path(R.home("doc"), "CRAN_mirrors.csv"), as.is=TRUE)  
     
   window=gwindow(title="Select CRAN site", visible=FALSE)
   size(window) <- c(500,400)
   group = ggroup(horizontal=FALSE, container = window)
-  
-  handler = function(h,...) {
-    res = svalue(h$obj, drop=FALSE)
-    URL <- res[1,4]
-    repos <- getOption("repos")
-    repos["CRAN"] <- gsub("/$", "", URL[1])
-    options(repos = repos)
-    if(!is.null(widget))
-      svalue(widget) <- repos
-    dispose(window)
-    ## go to install dialog?
-    if(doing.first) pmg.installCRANPackage()
 
-    }
-  lst = gtable(m,chosencol=1,
-    action=m,handler=handler
-    )
-  add(group, lst, expand=TRUE)
+  tbl = gtable(utils:::getCRANmirrors(), chosencol=4, 
+    filter.column=2,
+    handler = function(h,...) {
+      URL = svalue(tbl)
+      repos <- getOption("repos")
+      repos["CRAN"] <- gsub("/$", "", URL[1])
+      options(repos = repos)
+      dispose(window)
+    })
+  add(group, tbl, expand=TRUE)
   status = gstatusbar("Double click site to select", container=group)
   visible(window) <- TRUE               # now show the window
 }

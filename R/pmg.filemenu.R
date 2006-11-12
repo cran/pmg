@@ -16,16 +16,9 @@ read.table.list = list(
     ending = ")"
     ),
   type = "text",                        #either text or graphic
-  variableType = NULL,
+  variableType = "fileurl",
   assignto = TRUE,
   arguments = list(
-    "What file" = list(
-      file = list(
-        type = "gfilebrowse",
-        text = "",
-        quote = TRUE
-        )
-      ),
     arguments = list(
       header=FALSE.list,
       sep = list(
@@ -63,16 +56,9 @@ read.fwf.list = list(
     ending = ")"
     ),
   type = "text",                        #either text or graphic
-  variableType = NULL,
+  variableType = "fileurl",
   assignto = TRUE,
   arguments = list(
-    "What file" = list(
-      file = list(
-        type = "gfilebrowse",
-        text = "",
-        quote = TRUE
-        )
-      ),
     arguments = list(
       widths = list(
         type="gedit",
@@ -102,16 +88,9 @@ read.csv.list = list(
     ending = ")"
     ),
   type = "text",                        #either text or graphic
-  variableType = NULL,
+  variableType = "fileurl",
   assignto = TRUE,
   arguments = list(
-    "What file" = list(
-      file = list(
-        type = "gfilebrowse",
-        text = "",
-        quote = TRUE
-        )
-      ),
     arguments = list(
       header=FALSE.list,
       sep = list(

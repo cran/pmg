@@ -2,7 +2,9 @@
 
 ## TODO
 ## chisq.test, fisher.test, "mantelhaen.test" "mcnemar.test"
-#
+## * ---- isn't working names is giving unique guys
+## 
+
 
 
 dTestsDialog = function() {
@@ -18,15 +20,17 @@ dTestsDialog = function() {
     "1-sample signed rank test"="gui.wilcox.signed.rank.test",
     "2-sample t-test" =   "gui.t.test.2.sample",
     "2-sample t-test var. equal" = "gui.t.test.2.sample.var.equal",
+    "2-sample t-test, formula" =   "gui.t.test.2.sample.formula",
+    "2-sample t-test var. equal, formula" = "gui.t.test.2.sample.var.equal.formula",
     "2-sample rank sum test" = "gui.wilcox.rank.sum.test",
-    "-----" = "-----",
+    "----" = "-----",
     ##
     "Oneway ANOVA" = "gui.oneway.test",
     "Kruska-Wallis test" = "gui.kruskal.test",
-    "-----" = "-----",
+    "---" = "-----",
     ##
     "Correlation test" = "gui.cor.test",
-    "-----" = "-----",
+    "--" = "-----",
     ##
     "Test of variances" = "gui.var.test",
     "Ansari test" = "gui.ansari.test",
@@ -34,7 +38,7 @@ dTestsDialog = function() {
     "Fligner test" = "gui.fligner.test",
     "Mood test" = "gui.mood.test",
     ##
-    "-----" = "-----",
+    "------" = "-----",
     "2-sample Kolmogorov-Smirnov test" = "gui.ks.test",
     "Shapiro.test" = "gui.shapiro.test"
     
@@ -60,7 +64,8 @@ dTestsDialog = function() {
   gp = ggroup(horizontal=FALSE, container=win, raise.on.dragmotion = TRUE)
   popupGroup = ggroup(container=gp)
   addSpring(popupGroup)
-  testPopup = gdroplist(c("",names(tests)), container=popupGroup)
+  theNames = c("",names(tests))
+  testPopup = gdroplist(theNames, container=popupGroup)
   
   testWindow = ggroup(container=gp)
   add(testWindow,dialogList[["FirstOne"]], expand=TRUE)
@@ -72,7 +77,8 @@ dTestsDialog = function() {
     if(!is.empty(popupValue) || popupValue != "-----") {
       delete(testWindow,tag(testWindow,"currentTest"))
       dialogList = tag(testWindow, "dialogList")
-      if(is.null(dialogList[[popupValue]])) {
+##      if(is.null(dialogList[[popupValue]])) {
+      if(! popupValue %in% names(dialogList)) {
         dialogList[[popupValue]] <- do.call(tests[[popupValue]],list())
         tag(testWindow,  "dialogList") <- dialogList
       }
@@ -122,9 +128,20 @@ gui.t.test.2.sample = function(container= NULL) {
             template=t.test(rnorm(100), rnorm(100)),
             container = container)
 }
+gui.t.test.2.sample.formula = function(container= NULL) {
+  gui.htest("t.test",type="x~f",
+            template=t.test(rnorm(100) ~ factor(sample(1:2, 100,T))),
+            container = container)
+}
 gui.t.test.2.sample.var.equal = function(container=NULL) {
   gui.htest("t.test",type="bivariate",
             template=t.test(rnorm(100), rnorm(100), var.equal=TRUE),
+            extra.args = list("var.equal"=TRUE),
+            container = container)
+}
+gui.t.test.2.sample.var.equal.formula = function(container=NULL) {
+  gui.htest("t.test",type="x~f",
+            template=t.test(rnorm(100) ~ factor(sample(1:2, 100,T)), var.equal=TRUE),
             extra.args = list("var.equal"=TRUE),
             container = container)
 }
@@ -281,8 +298,8 @@ gui.htest = function(
                                         handler=function(h,...) updatedHtest(obj)
                                         )
                     }
-                })
-  addhandlerchanged(object.list[['data.name']],
+                  })
+    addhandlerchanged(object.list[['data.name']],
                     action = obj,
                     handler=function(h,...) {
                         varList = tag(object.list[['data.name']],"varList")
@@ -307,6 +324,7 @@ gui.htest = function(
                     handler = function(h,...) {
                       updatedHtest(h$action)
                     })
+
   addhandlerchanged(object.list[['alternative']],
                     action = obj,
                     handler = function(h,...) {
@@ -330,6 +348,7 @@ gui.htest = function(
 ## call function, update widgets
 updatedHtest = function(object, ...) {
   obj = object                          # for s3 consistency
+
   
   FUN = tag(obj,"FUN")
   extra.args = tag(obj,"extra.args")
@@ -373,8 +392,9 @@ updatedHtest = function(object, ...) {
       cat("Drop some variables\n")
       return()
     } else if(n == 1) {
-      x$data.name = Paste(id(dataVarList[[1]])," and Drop variable here")
-      svalue(object.list[["data.name"]]) <-  format(x[["data.name"]])
+      ## need another
+      tmp = Paste(id(dataVarList[[1]])," and Drop variable here")
+      svalue(object.list[["data.name"]]) <-  format(tmp)
     } else  {                           # n > 1
       theXName = id(dataVarList[[n-1]])
       theXValues = svalue(dataVarList[[n-1]])
@@ -449,8 +469,9 @@ updatedHtest = function(object, ...) {
         x = try(do.call(FUN,list(form)), silent=TRUE)
         x$data.name = Paste(tmp[1], " ~ ", tmp[2])
       } else if(n == 1) {
-        x$data.name = Paste(id(dataVarList[[1]])," and drop variable here")
-        svalue(object.list[["data.name"]]) <-  format(x[["data.name"]])
+        tmp = Paste(id(dataVarList[[1]])," and drop variable here")
+        svalue(object.list[["data.name"]]) <-  format(tmp)
+        x = NULL
       } else  {                           # n > 1
         theXName = id(dataVarList[[n-1]])
         theXValues = svalue(dataVarList[[n-1]])
@@ -479,14 +500,18 @@ updatedHtest = function(object, ...) {
           theName = "Need one numeric variable and one factor"
         }
 
-        x = try(do.call(FUN,list(argList, extra.args)), silent=TRUE)
+        argList$alternative = hA
+        argList$conf.level=conf.int.name
+        
+        
+        x = try(do.call(FUN,c(argList, extra.args)), silent=TRUE)
         x$data.name = theName
       }
     }
 
   }
 
-  if(inherits(x,"try-error"))
+  if(is.null(x) || inherits(x,"try-error"))
     return()
   
 #    x$statistic.name = names(x$statistic)
@@ -591,7 +616,7 @@ dHtest = function(x, type=NULL, digits = 4, container = NULL, ...) {
 #  add(text,"")
 #  add(text,x$method, font.attr=c("bold","large"))
 
-  add(group, glabel(Paste("<b>",x$method,"</b>"), markup=TRUE))
+  add(group, glabel(Paste("<b><i>",x$method,"</i></b>"), markup=TRUE))
 
   newLine = ggroup(container=group)
   add(newLine,glabel("data: "))

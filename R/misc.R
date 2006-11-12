@@ -37,6 +37,20 @@ lsModels = function(envir=.GlobalEnv())  lsType(.models, envir)
 lsTs = function(envir=.GlobalEnv())  lsType(.ts, envir)
 lsFunctions = function(envir=.GlobalEnv())  lsType(.functions, envir)
 
+###  These should be in gWidgets or gWidgetsRGtk2, but arent
+## what type of object is thixs and a size
+str2 <- function(obj) {
+  md <- mode(obj)
+  if (is.matrix(obj))  md <- "matrix"
+  obj.class <- oldClass(obj)
+  if (!is.null(obj.class)) {
+    md <- obj.class[1]
+  }
+  return(md)
+}
+
+
+
 
 ##################################################
 ##
@@ -59,9 +73,8 @@ pmgSummary.default = function(obj, ...) {
   group = ggroup(horizontal = FALSE,...)
 
   ## should I export this function?
-  icon = stockIconFromObject(obj)
+  icon = stockIconFromClass(class(obj))
   add(group, gimage(icon, dirname="stock", size="DIALOG"))
-
   table = glayout(adjust="left")
   add(group, table)
 
@@ -172,6 +185,7 @@ is.dataframelike = function(obj) {
 
 ## check if a gtkTreeViewCOlumn, make no GTK language
 is.gdataframecolumn = function(obj) {
+  ## is this making windows bug out?
   if(class(obj)[1] == "GtkTreeViewColumn")
     return(TRUE)
   else

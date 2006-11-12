@@ -48,13 +48,21 @@ pmg.help = function(h,...) {
 
 ## function for generic widget usage
 pmg.gw = function(lst, label=NULL) {
-  widget = ggenericwidget(lst, container=NULL, cli=pmg.cli,help.cb = pmg.help)
+  if(is.null(lst$variableTypeExtra)) {
+    widget = ggenericwidget(lst, container=NULL, cli=pmg.cli,help.cb = pmg.help)
+  } else {
+    argList = list(lst=lst,cli = pmg.cli,helphandler=pmg.help, container=NULL)
+    tmp = lst$variableTypeExtra ## a list
+    argList[[tmp$name]] <- tmp$value
+    widget = do.call("ggenericwidget",argList)
+  }
   if(is.null(label)) {
     if(is.list(lst))
       label = lst$title
     else
       label = Paste(lst,"()")                         # a character string,
   }
+
   add(pmg.dialog.notebook, widget, label=label, pageno = 3) # add near beginnign
 }
 
@@ -88,7 +96,7 @@ pmg.closeAll = function() {
 
 ##################################################
 ## call with "console" to use console, defaults to GUI
-pmg = function(cliType="console", width=750, height=.75*width,
+pmg = function(cliType="console", width=850, height=.75*width,
   guiToolkit=getOption("guiToolkit")) {
   if(!interactive()) {
     cat("PMG requires an interactive environment\n")
@@ -99,11 +107,9 @@ pmg = function(cliType="console", width=750, height=.75*width,
   ### which toolkit to load. If there is a gWidgets, then do that, else try pmggWidgetsRGtk
 
   if(require(gWidgets)) {
-    ## okay
-  } else if(require(pmggWidgetsRGtk)) {
-    ## okay
+    ## olay
   } else {
-    cat("PMG needs gWidgets")
+    cat("PMG needs gWidgets and a toolkit implementation\n"); return()
   }
 
   
@@ -122,12 +128,22 @@ pmg = function(cliType="console", width=750, height=.75*width,
     ## raise window, exit
     return()
   }
-  
+
+  ## Define the main widgets
+  assignInNamespace("pmg.menuBar", gmenu(pmg.menu, container=NULL), "pmg")
+  assignInNamespace("pmg.dialog.notebook", gnotebook(closebuttons = TRUE,
+                                                     dontCloseThese = 1:2, 
+                                                     tearable = FALSE),
+                    "pmg"
+                    )
+  assignInNamespace("pmg.statusBar", gstatusbar("", container=NULL),"pmg")
+
+
+  ## Main layout
   mainGroup = ggroup(horizontal = FALSE, spacing=0, container=pmg.dialogs.window)
   
 ##  pmg.menuBar <<- gmenu(pmg.menu, container=mainGroup)
-  assignInNamespace("pmg.menuBar", gmenu(pmg.menu, container=mainGroup), "pmg")
-
+  add(mainGroup, pmg.menuBar)
   ## optional menu for user The user menu is a named list, the
   ## top-level names yield the name across the menubar
   if(exists("pmg.user.menu")) {
@@ -147,24 +163,16 @@ pmg = function(cliType="console", width=750, height=.75*width,
   pmg.droparea = ggroup(horizontal=FALSE, container=bottomGroup)
   pmg.varbrowser = gvarbrowser(
     handler = function(h,...) {         # double click handler calls pmgSummary
-      values = h$obj[]
-      values = sapply(values, untaintName)
-      value = paste(values,collapse="$")
+      value = svalue(pmg.varbrowser)
       add(pmg.dialog.notebook, pmgSummary(value),
           label=Paste("Summary of ",svalue(h$obj)))
     }
     )
 
-  assignInNamespace("pmg.dialog.notebook", gnotebook(closebuttons = TRUE,
-                                                     dontCloseThese = 1:2, # was 1:3 with latticeexplorer
-                                                     tearable = FALSE),
-                    "pmg"
-                    )
   pg = gpanedgroup(pmg.varbrowser, pmg.dialog.notebook)
   add(bottomGroup, pg, expand=TRUE)
 
-  assignInNamespace("pmg.statusBar", gstatusbar("", container=mainGroup),"pmg")
-
+  add(mainGroup, pmg.statusBar)
   
   ## add buttons to buttonbar
   ## define list structure
@@ -186,7 +194,7 @@ pmg = function(cliType="console", width=750, height=.75*width,
   toolbar$save$icon = "save"
 
   ## plot notebook
-  if(require(cairoDevice)) {
+  if(guiToolkit == "RGtk2" && require(cairoDevice)) {
     toolbar$plotnotebook$handler = function(h,...) {
       if(is.null(pmg.plotnotebook.window) ||
          !is.gWindow(pmg.plotnotebook.window) ||
@@ -198,11 +206,12 @@ pmg = function(cliType="console", width=750, height=.75*width,
         focus(pmg.plotnotebook.window) <- TRUE
       }
     }
-  toolbar$plotnotebook$icon = "plot"
+    toolbar$plotnotebook$icon = "plot"
   }
 
   toolbar$tmp2$separator = TRUE
 
+  
   ## fill these in
 ##   toolbar$print$handler = function(h,...) print("print")
 ##   toolbar$print$icon = "print"
@@ -219,11 +228,10 @@ pmg = function(cliType="console", width=750, height=.75*width,
   }
   toolbar$help$icon = "help"
   
-
   ## make the toolbar
   tmp = gtoolbar(toolbar)
   assignInNamespace("pmg.toolBar",tmp,"pmg")
-  add(buttonBar, tmp, expand=TRUE)
+  add(buttonBar, pmg.toolBar, expand=TRUE)
 
   ##################################################
   ## add drop targets to left side
@@ -236,7 +244,8 @@ pmg = function(cliType="console", width=750, height=.75*width,
     dirname="stock",container=pmg.droparea)
   addSpace(pmg.droparea,10);add(pmg.droparea,gseparator());addSpace(pmg.droparea,10)
   removeDrop = gimage("delete",dirname="stock",container=pmg.droparea)
-
+  addSpring(pmg.droparea)
+  
   ## add handlers
   adddroptarget(summaryDrop,handler=function(h,...) {
     svalue(pmg.cli) <-  Paste("summary(",list(h$dropdata),")")
@@ -268,9 +277,11 @@ pmg = function(cliType="console", width=750, height=.75*width,
   ## add notebook page for editing data and cli
   ## the hack keeps charaacter not factor
   x = as.numeric(NA);df=data.frame(X1=x)
+
   pmg.data.frame.viewer.nb = gdfnotebook(tab.pos=1, dontCloseThese=1)
   ## for some reason this gives error message
   ##  add(pmg.data.frame.viewer.nb, gdf(df,do.subset=TRUE), label= "*scratch:1*")
+
   add(pmg.dialog.notebook, pmg.data.frame.viewer.nb, label = "Data",
       pageno = 2, override.closebutton = TRUE
       )

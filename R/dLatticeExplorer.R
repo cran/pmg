@@ -275,6 +275,7 @@ clearPlot = function(obj) {
     tag(obj,"dropHandlers") <- list()
   }
   updatePanel(obj)
+  panelChooser = tag(obj,"panelChooser"); svalue(panelChooser, index=TRUE)<-1  
   updatedLatticeExplorer(obj)
 }
 

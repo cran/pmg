@@ -1,16 +1,6 @@
-* make labels for arguments in igenericwidget jump to a help page?
-DONE Document -- pdf manual, recycle
-DONE console is default, cancel and start with GUI otherwise
-DONE optional pmg.user.menu added to menubar.
-
 ##################################################
-Next release
-better documentation
-ts stuff
-zoo stuff
-
-##################################################
-Next release
+Next release:
+pie(), barplot() functions
 add in stuff for manipulating data:
 xtabs, aggregate, ...
 * lmer interface (predictor | random_grouping_variable)

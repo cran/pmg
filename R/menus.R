@@ -59,7 +59,7 @@ pmg.menu$Data$"Import data set..."$"import table..."$handler =
 pmg.menu$Data$"Import data set..."$"import csv file..."$handler =
   function(h,...) pmg.gw(read.csv.list)
 pmg.menu$Data$"Import data set..."$"import fwf file..."$handler =
-  function(h,...) pmg.gw(import.fwf.list)
+  function(h,...) pmg.gw(read.fwf.list)
 ## dynamic
 pmg.menu$Data$"Dynamic summaries"$handler =
   function(h,...) dSummaryDialog()
@@ -132,6 +132,11 @@ pmg.menu$Data$"Manipulate"$"unstack"$handler =
 pmg.menu$Data$"Manipulate"$"subset"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.subset.dialog(),label="subset()")
 pmg.menu$Data$"Manipulate"$"subset"$icon = "subset"
+pmg.menu$Data$"Manipulate"$"subset"$handler =
+  function(h,...) add(pmg.dialog.notebook,pmg.subset.dialog(),label="subset()")
+pmg.menu$Data$"Manipulate"$"Edit data frame properties"$handler =
+  function(h,...) add(pmg.dialog.notebook,pmg.edit.dataframe.properties.dialog(),label="edit properties")
+pmg.menu$Data$"Manipulate"$"Edit data frame properties"$icon = "properties"
 ##
 pmg.menu$Data$"Coerce"$"as.numeric"$handler =
   function(h,...) pmg.gw(as.numeric.list)
@@ -172,6 +177,11 @@ pmg.menu$Plots$"Set plot parameters"$"Number of figures"$handler =
 pmg.menu$Plots$"Set plot parameters"$"Number of figures"$icon = "preferences"
 
 ##
+pmg.menu$Plots$univariate$"barplot"$handler = 
+  function(h,...) pmg.gw(barplot.list)
+pmg.menu$Plots$univariate$"barplot"$icon="barplot"
+pmg.menu$Plots$univariate$"piechart"$handler = 
+  function(h,...) pmg.gw(piechart.list)
 pmg.menu$Plots$univariate$"boxplot"$handler = 
   function(h,...) pmg.gw(univariate.boxplot.list)
 pmg.menu$Plots$univariate$"boxplot"$icon = "boxplot"
@@ -235,6 +245,8 @@ pmg.menu$Plots$"Add to graphic"$"rug"$handler =
   function(h,...) pmg.gw(rug.list)
 pmg.menu$Plots$"Add to graphic"$"title"$handler = 
   function(h,...) pmg.gw(add.title.list)
+pmg.menu$Plots$"Teaching demos"$handler =
+  function(h,...) pmg.teachingDemos()
 ###
 ### tests
 pmg.menu$Tests$"Dynamic tests"$handler = function(h,...) {
