@@ -23,6 +23,8 @@ pmg.chooseCRANmirror = function(widget = NULL, doing.first=FALSE,...) {
       repos["CRAN"] <- gsub("/$", "", URL[1])
       options(repos = repos)
       dispose(window)
+      ## now install
+      if(doing.first) pmg.installCRANPackage()
     })
   add(group, tbl, expand=TRUE)
   status = gstatusbar("Double click site to select", container=group)

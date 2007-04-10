@@ -1,7 +1,7 @@
 ##################################################
 Next release:
-pie(), barplot() functions
-add in stuff for manipulating data:
-xtabs, aggregate, ...
-* lmer interface (predictor | random_grouping_variable)
+* fix windows issues: gedit color, popupbox width
+* lmer interface.
+DID * iplots menu -- if present
+* add in stuff for manipulating data: did reshape, xtabs? aggregate? ...
 

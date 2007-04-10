@@ -1,3 +1,40 @@
+2007-04-06  John Verzani  <jverzani@gmail.com>
+
+	* R/dpgrFuncs.R: wrote 1 gui for the pdqr functions
+
+2007-04-02  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.iplots.R: added in iplots dialog. Could use a bit of work:
+		  text, ...
+
+2007-03-31  John Verzani  <jverzani@gmail.com>
+
+	* R/YN.R: made so text entries evaluate their values, not just
+		  numeric entries now
+
+	* R/dLatticeExplorer.R: fixed bug with bivariate graphs
+
+2007-03-30  John Verzani  <jverzani@gmail.com>
+
+	* R/dModelsDialog.R: error with response and predictor vars
+		  fixed. Should be able to edit them now.
+
+2007-03-10  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.teachingDemos.R: fixed typo in width
+
+	* R/dHtest.R: minor issue with bivariate and label after firt
+		  value was dropped
+
+2007-03-02  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.installCRANPackage.R: fixed minor bug, didn't call back to
+		  dialog if choosing a CRAN mirror
+
+2007-02-25  John Verzani  <jverzani@gmail.com>
+
+	* R/reshape.R: Added this set of dialogs
+
 2007-02-14  John Verzani  <jverzani@gmail.com>
 
 	* R/dHtest.R: fixed issue iwth x~f and alternative

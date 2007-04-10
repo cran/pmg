@@ -141,8 +141,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
 
   ## Main layout
   mainGroup = ggroup(horizontal = FALSE, spacing=0, container=pmg.dialogs.window)
-  
-##  pmg.menuBar <<- gmenu(pmg.menu, container=mainGroup)
+
   add(mainGroup, pmg.menuBar)
   ## optional menu for user The user menu is a named list, the
   ## top-level names yield the name across the menubar
@@ -156,7 +155,8 @@ pmg = function(cliType="console", width=850, height=.75*width,
   helpMenu = gmenu(help.menu, name="Help")
   add(pmg.menuBar, helpMenu)
   
-  buttonBar = ggroup(spacing=0,container=mainGroup)
+  buttonBar = ggroup(spacing=0)
+  add(mainGroup, buttonBar)             # toolbar
 
   bottomGroup = ggroup(horizontal=TRUE)
   add(mainGroup, bottomGroup, expand=TRUE)

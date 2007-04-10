@@ -237,7 +237,9 @@ dynamicModelWidget = function(
                         tag(obj$ref,"dropHandlers") <- list()
                       }
                       
-                      tag(obj$ref,  "responseVarData") <- svalue(h$obj$ref)
+                      tag(obj$ref,  "responseVarData") <- svalue(responseVar)
+
+                      
                       ## put popup on 1
                       svalue(tag(obj$ref,"actionPopup"),index=TRUE) <- 1
                       
@@ -284,9 +286,22 @@ dynamicModelWidget = function(
                         removehandler(obj$ref,ids)
                         tag(obj$ref,"dropHandlers") <- list()
                       }
-                      vars = sapply(strsplit(svalue(h$obj),"\\+"),stripWhiteSpace)
+
+                      vals = svalue(predictorVars)
+
+                      ## clear out any leading or trailing +
+                      vals = sub("\\s*[+]\\s*","",vals)
+                      if(vals == "")    # in case of cleaning
+                        vars = NULL
+                      else 
+                        vars = sapply(strsplit(vals,"\\+"),stripWhiteSpace)
                       tag(obj$ref,  "predictorVarsData") <- vars
 
+                      ## add to predictorVars
+                      if(is.null(vars))
+                        svalue(predictorVars) <- "predictor(s)" # leave target
+                      else
+                        svalue(predictorVars) <- paste("+",paste(vars,collapse=" + "),collapse="  ")
                       ## put popup on 1
                       svalue(tag(obj$ref,"actionPopup"),index=TRUE) <- 1
                       
@@ -412,6 +427,7 @@ update.gDynamicModel = function(object, ...) {
   intercept.val = svalue(intercept) # a string
   predictorVarsData = tag(obj,"predictorVarsData") # a list
 
+  
   ## make formula
   ## how to avoid eval(parse... here?
   if(is.na(responseVarData)) {
@@ -421,6 +437,7 @@ update.gDynamicModel = function(object, ...) {
 
   env = environment()
   assign(id(responseVarData),svalue(responseVarData), envir=env)
+
   if(length(predictorVarsData) > 0) {
     sapply(predictorVarsData, function(i)
            assign(id(i), svalue(i), envir=env) ) 

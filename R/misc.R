@@ -361,6 +361,7 @@ Paste = function(..., sep="", collapse="") {
   x = x[x != "NA"]
   paste(x, sep=sep, collapse=collapse)
 }
+
 stripWhiteSpace = function(str) {
   sub('[[:space:]]+$', '', str) ## from ?gsub
   sub('^[[:space:]]+', '', str) ## from ?gsub
@@ -370,6 +371,8 @@ stripWhiteSpace = function(str) {
 rpel = function(string, envir=.GlobalEnv) {
   eval(parse(text=string), envir=envir)
 }
+
+
 
 "Timestamp<-" <- function(obj,value) {
   currentStamp = Timestamp(obj)

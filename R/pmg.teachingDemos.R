@@ -2,11 +2,15 @@
 ## histogram -- select bins
 ## binomial
 ## normal sampling -- clt
-## bootstrap
 ## confidence intervals
 ## power
+## probability calculator
+## 
+#### IMPLEMENT ME:
+## bootstrap
 ## robustness of regression line
 
+## some in YN.R from Yvonnick Noel yvonnick.noel@uhb.fr
 
 
 pmgDemo = function(lst, container=NULL) {
@@ -98,7 +102,7 @@ histogramDemo = list(
     noBins = as.integer(length(dataSet)*as.numeric(valList[[2]]))
     noBins = max(1, noBins)
     
-    png(file, widgth=480, height=480)
+    png(file, width=480, height=480)
     on.exit(dev.off())
 
     theTitle = paste(noBins,"bins and ", length(dataSet),"observations" )
@@ -401,14 +405,22 @@ powerDemo = list(
   mb = list()
   mb$Demo$"Histogram bin selection"$handler =
     function(...) add(nb,pmgDemo(histogramDemo),label="Histogram")
+  mb$Demo$"histogram and density"$handler = 
+    function(...) add(nb, histogramAndDensity(NULL), label = "View histogram and density")
   mb$Demo$"Binomial distribution"$handler =
     function(...) add(nb,pmgDemo(binomialDemo), label="Binomial")
+  mb$Demo$"construction of normal"$handler = 
+    function(...) add(nb, constructionOfNormal(NULL), label = "See normal from sum")
   mb$Demo$"Central Limit Theorem"$handler =
     function(...) add(nb,pmgDemo(CLTDemo), label="CLT")
+  mb$Demo$"probability calculator"$handler = 
+    function(...) add(nb, probabilityCalculator(NULL), label = "probaiblity calculator")
   mb$Demo$"Confidence Intervals"$handler =
     function(...) add(nb, pmgDemo(confIntervalDemo), label = "Confidence intervals")
   mb$Demo$"Power of test"$handler =
     function(...) add(nb, pmgDemo(powerDemo), label = "Power of a test")
+
+
   add(group, gmenu(mb))
   nb = gnotebook(closebuttons=TRUE)
   add(group, nb, expand=TRUE)

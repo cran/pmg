@@ -93,40 +93,23 @@ pmg.menu$Data$"Bivariate summaries"$correlation$handler =
 pmg.menu$Data$"Bivariate summaries"$"Cross tabulation"$handler =
   function(h,...) pmg.gw(xtabs.list)
 ##
-pmg.menu$Data$"Random data"$Probabilities$"normal"$handler =
-  function(h,...) pmg.gw(pdf.normal.list)
-pmg.menu$Data$"Random data"$Probabilities$"t"$handler =
-  function(h,...) pmg.gw(pdf.t.list)
-pmg.menu$Data$"Random data"$Probabilities$"uniform"$handler =
-  function(h,...) pmg.gw(pdf.uniform.list)
-pmg.menu$Data$"Random data"$Probabilities$"exp"$handler =
-  function(h,...) pmg.gw(pdf.exp.list)
-##
-pmg.menu$Data$"Random data"$Quantiles$"normal"$handler =
-  function(h,...) pmg.gw(quantile.normal.list)
-pmg.menu$Data$"Random data"$Quantiles$"t"$handler =
-  function(h,...) pmg.gw(quantile.t.list)
-pmg.menu$Data$"Random data"$Quantiles$"uniform"$handler =
-  function(h,...) pmg.gw(quantile.uniform.list)
-pmg.menu$Data$"Random data"$Quantiles$"exp"$handler =
-  function(h,...) pmg.gw(quantile.exp.list)
-##
-pmg.menu$Data$"Random data"$"Random samples"$"normal"$handler =
-  function(h,...) pmg.gw(random.normal.list)
-pmg.menu$Data$"Random data"$"Random samples"$"t"$handler =
-  function(h,...) pmg.gw(random.t.list)
-pmg.menu$Data$"Random data"$"Random samples"$"uniform"$handler =
-  function(h,...) pmg.gw(random.uniform.list)
-pmg.menu$Data$"Random data"$"Random samples"$"exp"$handler =
-  function(h,...) pmg.gw(random.exp.list)
-##
+pmg.menu$Data$"Random data"$"Cumulative Probabilities"$handler = function(h,...) 
+  add(pmg.dialog.notebook,dpqrfuncs(type="p"),label="p funcs")
+pmg.menu$Data$"Random data"$"Probabilities"$handler = function(h,...) 
+  add(pmg.dialog.notebook,dpqrfuncs(type="d"),label="d funcs")
+pmg.menu$Data$"Random data"$Quantiles$handler = function(h,...) 
+  add(pmg.dialog.notebook,dpqrfuncs(type="q"),label="q funcs")
+pmg.menu$Data$"Random data"$"Random samples"$handler = function(h,...) 
+  add(pmg.dialog.notebook,dpqrfuncs(type="r"),label="r funcs")
+
+
 pmg.menu$Data$"Random data"$"Sample"$handler =
   function(h,...) pmg.gw(sample.list)
 ##
-pmg.menu$Data$"Manipulate"$"stack"$handler =
-  function(h,...) pmg.gw(stack.list)
-pmg.menu$Data$"Manipulate"$"unstack"$handler =
-  function(h,...) pmg.gw(unstack.list)
+if(require(reshape)) {
+  pmg.menu$Data$"Manipulate"$reshape$melt$handler = function(h,...) pmg.meltGUI()
+  pmg.menu$Data$"Manipulate"$reshape$cast$handler = function(h,...) pmg.castGUI()
+}
 #pmg.menu$Data$"Manipulate"$"subset"$handler =
 #  function(h,...) pmg.gw(subset.list)
 pmg.menu$Data$"Manipulate"$"subset"$handler =
@@ -134,6 +117,10 @@ pmg.menu$Data$"Manipulate"$"subset"$handler =
 pmg.menu$Data$"Manipulate"$"subset"$icon = "subset"
 pmg.menu$Data$"Manipulate"$"subset"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.subset.dialog(),label="subset()")
+pmg.menu$Data$"Manipulate"$"stack"$handler =
+  function(h,...) pmg.gw(stack.list)
+pmg.menu$Data$"Manipulate"$"unstack"$handler =
+  function(h,...) pmg.gw(unstack.list)
 pmg.menu$Data$"Manipulate"$"Edit data frame properties"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.edit.dataframe.properties.dialog(),label="edit properties")
 pmg.menu$Data$"Manipulate"$"Edit data frame properties"$icon = "properties"
@@ -245,6 +232,15 @@ pmg.menu$Plots$"Add to graphic"$"rug"$handler =
   function(h,...) pmg.gw(rug.list)
 pmg.menu$Plots$"Add to graphic"$"title"$handler = 
   function(h,...) pmg.gw(add.title.list)
+
+
+## iplots conditionally
+if(require(iplots)) {
+  pmg.menu$Plots$"iplots"$handler = function(...) {
+    pmg.iplots()
+  }
+}
+  
 pmg.menu$Plots$"Teaching demos"$handler =
   function(h,...) pmg.teachingDemos()
 ###

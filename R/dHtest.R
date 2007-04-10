@@ -55,7 +55,7 @@ dTestsDialog = function() {
   dialogList[["FirstOne"]] = glabel("Select a test from popup")
   
   
-  win = gwindow("Tests",handler = function(h,...) {
+  win = gwindow("Dynamic tests",handler = function(h,...) {
     for(i in dialogList) {
       ids = tag(i,"dropHandlers")
       if(!is.null(ids))
@@ -393,7 +393,7 @@ updatedHtest = function(object, ...) {
       return()
     } else if(n == 1) {
       ## need another
-      tmp = Paste(id(dataVarList[[1]])," and Drop variable here")
+      x$data.name = Paste(id(dataVarList[[1]])," and Drop variable here")
       svalue(object.list[["data.name"]]) <-  format(tmp)
     } else  {                           # n > 1
       theXName = id(dataVarList[[n-1]])

@@ -1,6 +1,5 @@
 (TeX-add-style-hook "pmg"
- (function
-  (lambda ()
+ (lambda ()
     (LaTeX-add-environments
      "RArgs")
     (LaTeX-add-labels
@@ -17,6 +16,7 @@
      '("RFunc" 1)
      '("RCode" 1))
     (TeX-run-style-hooks
+     "/home/verzani/R/lib/R/share/texmf/Sweave"
      "fancyhdr"
      "fancyvrb"
      "color"
@@ -32,5 +32,5 @@
      "latex2e"
      "art12"
      "article"
-     "12pt"))))
+     "12pt")))
 

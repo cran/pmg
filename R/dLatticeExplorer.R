@@ -65,7 +65,8 @@ dLatticeExplorer = function(
    allGraphs = c("dotplot","xyplot","barchart","stripplot","bwplot","qq",
      "--------",
      "histogram","densityplot","qqmath")
-   univariateGraphs = c("histogram","densityplot","qqmath")
+  univariateGraphs = c("histogram","densityplot","qqmath")
+  bivariateGraphs = c("xyplot","qq")
    availPanelFuns = list(
      dotplot = c("mean","median"),
      xyplot = c("lmline","loess","lines","rug"),
@@ -81,6 +82,7 @@ dLatticeExplorer = function(
   ## now store these into the object
   tag(obj,"allGraphs")  <- allGraphs
   tag(obj,"univariateGraphs")  <- univariateGraphs
+  tag(obj,"bivariateGraphs")  <- bivariateGraphs
   tag(obj,"availPanelFuns")  <- availPanelFuns
 
   clearButton = gbutton("clear",action = obj,
@@ -160,6 +162,7 @@ updatedLatticeExplorer = function(object,...) {
   vars = tag(obj,"varlist")
   FUN = tag(obj,"function")
   doUnivariate = FUN %in% tag(obj,"univariateGraphs")
+  doBivariate = FUN %in% tag(obj,"bivariateGraphs")
   
   ## make formula
   nvars = length(vars)
@@ -168,9 +171,11 @@ updatedLatticeExplorer = function(object,...) {
     
   if(nvars == 0) {
     cat("can't draw plot, add variables\n")
-    makeEmptyPlot(obj)
+    makeEmptyPlot(obj)                  # default message
     return()
   }
+
+  ## assign values within env for eval parse
   varNames = sapply(1:nvars, function(i) id(vars[[i]]))
   sapply(1:nvars, function(i)
          assign(id(vars[[i]]),svalue(vars[[i]]), envir=env)
@@ -179,12 +184,15 @@ updatedLatticeExplorer = function(object,...) {
   command = NA
   lst = list()
   if(nvars == 1) {
+    if(doBivariate) {
+      makeEmptyPlot(obj,"Needs atleast one more variable")
+      return()
+    }
     if(doUnivariate) {
       command = Paste(FUN,"( ~ ", varNames[1],")")
       xlab = varNames[1]; ylab=NULL
       x = ~ svalue(vars[[1]])
-    }
-    else {
+    } else {
       command = Paste(FUN,"(", varNames[1],")")
       xlab = varNames[1]; ylab=NULL
       x = svalue(vars[[1]])
@@ -193,9 +201,12 @@ updatedLatticeExplorer = function(object,...) {
 
   if(nvars == 2) {
     ## check that not too many levels
-    if(nlevels(shingle(svalue(vars[[2]]))) > 40) {
-      cat("Too many levels for the conditioning variable\n")
-      return()
+    if(!doBivariate) {
+      if(nlevels(shingle(svalue(vars[[2]]))) > 40) {
+        cat("Too many levels for the conditioning variable\n")
+        makeEmptyPlot(obj,"Too many levels for conditioning\nvariable. Try a biviate plot?")
+        return()
+      }
     }
     if(doUnivariate) {
       command = Paste(FUN,"( ~ ", varNames[1],"|", varNames[2],")")
@@ -210,17 +221,29 @@ updatedLatticeExplorer = function(object,...) {
 
   if(nvars >= 3) {
     if(doUnivariate) {
-      cat("univariate only has two possible variables\n")
-      command = NULL; xlab = NULL: ylab=NULL
-      x = NULL
+      command = Paste(FUN,"( ~ ", varNames[1],"|", varNames[2],")")
+      xlab = varNames[1]; ylab = NULL
+      x = ~ svalue(vars[[1]]) | svalue(vars[[2]])
+      cat("Too many values for univariate graph. Clear and do again.")
     } else {
-      m1 = nlevels(shingle(svalue(vars[[2]])))
-      m2 = nlevels(shingle(svalue(vars[[3]])))
-      if(m1*m2 > 40) {
-        cat("Too many levels for the conditioning variables\n")
-        return()
+      if(doBivariate) {
+        m2 = nlevels(shingle(svalue(vars[[3]])))
+        if(m2 > 25) {
+          cat("Too many levels for the conditioning variables\n")
+          makeEmptyPlot(obj,"Too many levels for conditioning\nvariable.")
+          return()
+        }
+      } else {
+        m1 = nlevels(shingle(svalue(vars[[2]])))
+        m2 = nlevels(shingle(svalue(vars[[3]])))
+        if(m1*m2 > 40) {
+          cat("Too many levels for the conditioning variables\n")
+          makeEmptyPlot(obj,"Too many levels for conditioning\nvariables.")
+          return()
+        }
       }
-
+      
+      
 
       command = Paste(FUN,"(", varNames[1],"~", varNames[2],"|", varNames[3],")")
       xlab = varNames[1]; ylab = varNames[2]
@@ -260,7 +283,7 @@ updatedLatticeExplorer = function(object,...) {
     if(!inherits(x,"try-error"))
       print(x)            # don't forget print()
     else
-      cat("Not ready to plot. Drop another variable?\n")
+      cat("Not ready to plot:",x,"\n")
   }     
 }
 
@@ -279,11 +302,11 @@ clearPlot = function(obj) {
   updatedLatticeExplorer(obj)
 }
 
-makeEmptyPlot = function(obj) {
+makeEmptyPlot = function(obj, message="Drop variable(s) here") {
 #  visible(obj) <- TRUE
   plot.new()
   plot.window(xlim=c(0,1),ylim=c(0,1))
-  text(1/2, 1/2, "Drop variables here")
+  text(1/2, 1/2, message)
 }
 
 clearPanel = function(obj) {

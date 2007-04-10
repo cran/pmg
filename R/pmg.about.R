@@ -17,6 +17,8 @@ pmg.about = function(container=NULL) {
                "\n",
                "Comments to pmgRgui@gmail.com\n",
                "\n\n",
+               theFactsMam[1,"Author"],
+               "\n\n",
                theFactsMam[1,"Description"],
                "\n"
                ), markup=TRUE, container=group)
