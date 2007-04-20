@@ -82,14 +82,14 @@ glm.list = list(
       family = list(
         type = "gdroplist",
         items = c(
-          '"binomial(link = "logit")"',
-          '"gaussian(link = "identity")"',
-          '"Gamma(link = "inverse")"',
-          '"inverse.gaussian(link = "1/mu^2")"',
-          '"poisson(link = "log")"',
-          '"quasi(link = "identity", variance = "constant")"',
-          '"quasibinomial(link = "logit")"',
-          '"quasipoisson(link = "log")"'
+          '"binomial(link = \'logit\')"',
+          '"gaussian(link = \'identity\')"',
+          '"Gamma(link = \'inverse\')"',
+          '"inverse.gaussian(link = \'1/mu^2\')"',
+          '"poisson(link = \'log\')"',
+          '"quasi(link = \'identity\', variance = \'constant\')"',
+          '"quasibinomial(link = \'logit\')"',
+          '"quasipoisson(link = \'log\')"'
           )
         ),
       method = list(

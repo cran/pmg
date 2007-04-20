@@ -1,7 +1,0 @@
-##################################################
-Next release:
-* fix windows issues: gedit color, popupbox width
-* lmer interface.
-DID * iplots menu -- if present
-* add in stuff for manipulating data: did reshape, xtabs? aggregate? ...
-

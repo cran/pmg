@@ -300,7 +300,7 @@ pmg.menu$Models$"Dynamic models"$icon="execute"
 pmg.menu$Models$Regression$"lm"$handler =
   function(h,...) pmg.gw(lm.list)
 pmg.menu$Models$Regression$"lqs"$handler =
-  function(h,...) pmg.gw(lsq.list)
+  function(h,...) pmg.gw(lqs.list)
 pmg.menu$Models$Regression$"glm"$handler =
   function(h,...) pmg.gw(glm.list)
 #

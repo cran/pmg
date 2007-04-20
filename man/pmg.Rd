@@ -7,14 +7,13 @@
 
 \title{A function to start the pmg GUI}
 \description{
-	The PMG GUI is a simple GUI for R using the Gtk2 as the
+	The PMG GUI is a simple GUI for R using RGtk2 as the
 	graphical toolkit. The GUI is written using the
-	\code{gWidgets} interface to a toolkit, most likely the the
-	RGtk2 package.
+	\code{gWidgets} interface to a toolkit.
 
 }
 \usage{
-pmg(cliType="console",  width=850, height=.75*width,guiToolkit=getOption("guiToolkit"))
+pmg(cliType="console",  width=850, height=.75*width,guiToolkit="RGtk2")
 
 pmg.add(widget,label)
 

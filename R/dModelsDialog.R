@@ -82,6 +82,9 @@ plot.gDynamicModelDialog = function(x, ...)  {
 ## use lm function
 gui.lm = function(container=NULL) {
   actions =list(
+    "drop1" = list(
+      FUN = "drop1"
+      ),
     "plot: Residuals vs Fitted" =list(
       FUN="plot",
       ARGS = list(which=1)

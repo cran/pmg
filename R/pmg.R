@@ -63,7 +63,9 @@ pmg.gw = function(lst, label=NULL) {
       label = Paste(lst,"()")                         # a character string,
   }
 
-  add(pmg.dialog.notebook, widget, label=label, pageno = 3) # add near beginnign
+  g = ggroup(use.scrollwindow=TRUE)
+  add(g,widget, expand=TRUE)
+  add(pmg.dialog.notebook, g, label=label, pageno = 3) # add near beginnign
 }
 
 ### Add to the dialog notebook
@@ -97,21 +99,31 @@ pmg.closeAll = function() {
 ##################################################
 ## call with "console" to use console, defaults to GUI
 pmg = function(cliType="console", width=850, height=.75*width,
-  guiToolkit=getOption("guiToolkit")) {
+  guiToolkit="RGtk2") {                 # getOption("guiToolkit")
   if(!interactive()) {
     cat("PMG requires an interactive environment\n")
     return()                            # no sense to have GUI if not
   }
 
 
+  ## sizes
+  rightWidth = width*.6                 # notebook, command area
+  mainHeight = height*.8                # height without menu, tool bars
+
   ### which toolkit to load. If there is a gWidgets, then do that, else try pmggWidgetsRGtk
-
-  if(require(gWidgets)) {
-    ## olay
-  } else {
-    cat("PMG needs gWidgets and a toolkit implementation\n"); return()
+  if(!require(gWidgets)) {
+    cat("PMG currently needs gWidgets and gWidgetsRGtk2\n");
+    return()
   }
-
+  if(!require(gWidgetsRGtk2)) {
+   cat("PMG needs gWidgets and gWidgetsRGtk2\n");
+    return()
+  } 
+  if(guiToolkit != "RGtk2") {
+    cat("pmg uses gWidgets and gWidgetsRGtk2, overriding choice of toolkit\n")
+  }
+  
+  options("guiToolkit"="RGtk2")         # must have RGtk2 here
   
   ## what type of cli
   if(cliType != "console")
@@ -132,7 +144,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
   ## Define the main widgets
   assignInNamespace("pmg.menuBar", gmenu(pmg.menu, container=NULL), "pmg")
   assignInNamespace("pmg.dialog.notebook", gnotebook(closebuttons = TRUE,
-                                                     dontCloseThese = 1:2, 
+                                                     dontCloseThese = 1, # was 1:2 before commands area moved
                                                      tearable = FALSE),
                     "pmg"
                     )
@@ -169,7 +181,18 @@ pmg = function(cliType="console", width=850, height=.75*width,
     }
     )
 
-  pg = gpanedgroup(pmg.varbrowser, pmg.dialog.notebook)
+
+  ### How to layout the notebook?
+  ### Try with command area below
+  ## pg = gpanedgroup(pmg.varbrowser, pmg.dialog.notebook)
+  ## put commands on bottom able to be expanded
+
+  commandGroup = gexpandgroup("Command area")
+  visible(commandGroup) <- TRUE
+  rightPanedGroup = gpanedgroup(pmg.dialog.notebook,commandGroup,horizontal=FALSE)
+  pg = gpanedgroup(pmg.varbrowser, rightPanedGroup)
+  size(pmg.dialog.notebook) <- c(rightWidth,mainHeight*.67)
+  
   add(bottomGroup, pg, expand=TRUE)
 
   add(mainGroup, pmg.statusBar)
@@ -263,17 +286,18 @@ pmg = function(cliType="console", width=850, height=.75*width,
 
 
   ## add big page to notebook to give instructions, and fix size of notebook
-  if(cliType == "console")
-    assignInNamespace("pmg.cli", gcommandline("",width=width,useConsole=TRUE),"pmg")
-  else
-    assignInNamespace("pmg.cli",gcommandline("",width=width,useConsole=FALSE),"pmg")
-
+  useConsole = ifelse(cliType == "console",TRUE, FALSE)
+  assignInNamespace("pmg.cli",
+                    gcommandline("",width=rightWidth,height=mainHeight*.33,
+                                              useConsole=useConsole),"pmg")
   ## put CLI and editing sheet here
-  add(pmg.dialog.notebook,pmg.cli,label = "Commands",
-  pageno = 1, override.closebutton = TRUE,
-  tearable = FALSE
-  )
-
+  ## This adds to notebook
+##   add(pmg.dialog.notebook,pmg.cli,label = "Commands",
+##       pageno = 1, override.closebutton = TRUE,
+##       tearable = FALSE
+##       )
+  add(commandGroup, pmg.cli, expand=TRUE)
+  
   ## add notebook page for editing data and cli
   ## the hack keeps charaacter not factor
   x = as.numeric(NA);df=data.frame(X1=x)
