@@ -124,12 +124,9 @@
 
     ## we have to fuss around to actually get the proper names into
     ## the plots.
-    print("DEBUG")
-    print(iset.cur())
-    print(iset.list())
 
     setISetByName(name)
-    print(iset.cur())
+
 
     tmpEnvir = environment()
     
@@ -269,7 +266,7 @@
 
     ## we do different things based on request here
     addThis = svalue(addObjectsSelector)
-    print(addThis)
+
     if(addThis == "") return()
 
     curPlotType = getCurrentPlotNameType()[2]
@@ -307,7 +304,6 @@
             cat("need to have two variables to add trend line\n")
             return(TRUE)
           }
-          print(svalue(useSelected))
           if(svalue(useSelected)) {
             theSelected = try(iset.selected(),silent=TRUE)
             if(inherits(theSelected,"try-error"))
@@ -320,7 +316,6 @@
           if(type == "lm") {
             res = lm(restDF[,2] ~ restDF[,1])
             iabline(res)
-            print(res)
           } else if(type == "lowess") {
             ilines(lowess(restDF[,1], restDF[,2]))
           }
@@ -402,7 +397,7 @@
 }
   
 
-pmg.iplots = function(container = gwindow("PMG: iplot interface"), envir=.GlobalEnv) {
+pmg.iplots = function(container = gwindow("PMG: iplots interface"), envir=.GlobalEnv) {
 
   require(iplots)                       # load if not loaded
   
