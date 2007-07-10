@@ -10,7 +10,7 @@
 ## How to improve these?
 
 pmg.meltGUI = function(container = gwindow("Melt a data frame")) {
-  if(!require(reshape)) {
+  if(!do.call("require",list("reshape"))) {
     cat("Need to install reshape package\n")
     return()
   }
@@ -172,7 +172,7 @@ pmg.meltGUI = function(container = gwindow("Melt a data frame")) {
 
 pmg.castGUI = function(container=gwindow("Cast data")) {
 
-  if(!require(reshape)) {
+  if(!do.call("require",list("reshape"))) {
     cat("Need to install reshape package\n")
     return()
   }

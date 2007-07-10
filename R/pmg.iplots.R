@@ -399,7 +399,7 @@
 
 pmg.iplots = function(container = gwindow("PMG: iplots interface"), envir=.GlobalEnv) {
 
-  require(iplots)                       # load if not loaded
+  do.call("require",list("iplots"))                       # load if not loaded
   
 
   ## we have name, data. Now set up a new iset for this.

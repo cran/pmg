@@ -106,7 +106,7 @@ pmg.menu$Data$"Random data"$"Random samples"$handler = function(h,...)
 pmg.menu$Data$"Random data"$"Sample"$handler =
   function(h,...) pmg.gw(sample.list)
 ##
-if(require(reshape)) {
+if(do.call("require",list("reshape"))) {
   pmg.menu$Data$"Manipulate"$reshape$melt$handler = function(h,...) pmg.meltGUI()
   pmg.menu$Data$"Manipulate"$reshape$cast$handler = function(h,...) pmg.castGUI()
 }
@@ -235,7 +235,7 @@ pmg.menu$Plots$"Add to graphic"$"title"$handler =
 
 
 ## iplots conditionally
-if(require(iplots)) {
+if(do.call("require",list("iplots"))) {
   pmg.menu$Plots$"iplots"$handler = function(...) {
     pmg.iplots()
   }
