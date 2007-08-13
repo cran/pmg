@@ -3,9 +3,10 @@ export(pmg.gw)
 export(pmg.add)
 export(pmg.addMenubar)
 export(pmg.eval)
-
+export(pmgRepeatTrials)
 export(plotecdf)
 export(kurtosis)
+
 S3method("kurtosis","default")
 S3method("kurtosis","character")
 S3method("kurtosis","factor")

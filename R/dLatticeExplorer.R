@@ -1,4 +1,6 @@
 ## create a droppable, dyamic widget for exploratory graphs
+## aspect: fill, xy, iso
+## type: 
 ## TODO: make panel functions better
 ##       * add more lattice graphs?
 ##       * means to edit formulas
@@ -35,7 +37,10 @@ dLatticeExplorer = function(
   ## add buttons
   gdButtons = ggroup(container = gdGroup)
   add(gdGroup, gd, expand=FALSE)
+  f = gframe("lattice options", container = gdGroup)
+  latticeOptionsGroup = ggroup(horizontal=TRUE, container = f, expand=TRUE)
 
+  
   ## what to do with dropped values.
   ## can't put obj in here without some machinations, as the
   dropHandler = handler = function(h,...) {
@@ -62,9 +67,9 @@ dLatticeExplorer = function(
   }
   adddroptarget(gd,targetType="object",handler = dropHandler )
 
-   allGraphs = c("dotplot","xyplot","barchart","stripplot","bwplot","qq",
+   allGraphs = c("histogram","densityplot","qqmath",
      "--------",
-     "histogram","densityplot","qqmath")
+     "dotplot","xyplot","barchart","stripplot","bwplot","qq")
   univariateGraphs = c("histogram","densityplot","qqmath")
   bivariateGraphs = c("xyplot","qq")
    availPanelFuns = list(
@@ -121,6 +126,30 @@ dLatticeExplorer = function(
      })
   tag(obj,"plotChooser") <-  plotChooser
   tag(obj,"panelChooser") <-  panelChooser
+
+
+  glabel("aspect=", cont=latticeOptionsGroup)
+  aspectChooser = gdroplist(c("fill","xy","iso"), editable=TRUE,
+    cont=latticeOptionsGroup,
+    handler = function(...) updatedLatticeExplorer(obj))
+
+  gseparator(horizontal=FALSE,cont=latticeOptionsGroup)
+  glabel("type=", cont=latticeOptionsGroup)
+  typeChooser = gcheckboxgroup(c('p','l','a','o'),
+    horizontal=TRUE,
+    cont=latticeOptionsGroup,
+    handler = function(...) updatedLatticeExplorer(obj))
+
+  gseparator(horizontal=FALSE,cont=latticeOptionsGroup)
+  glabel("col=",cont=latticeOptionsGroup)
+  colChooser = gdroplist(c("","black","red","blue","green","brown","yellow"),
+    cont = latticeOptionsGroup,
+    handler = function(...) updatedLatticeExplorer(obj))
+
+  tag(obj,"aspectChooser") <- aspectChooser
+  tag(obj,"typeChooser") <- typeChooser
+  tag(obj,"colChooser") <- colChooser
+
   updatePanel(obj)
 
 #  makeEmptyPlot(obj)
@@ -277,6 +306,18 @@ updatedLatticeExplorer = function(object,...) {
     lst$panel = NULL
   }
 
+  ## aspect
+  aspectVal <- svalue(tag(obj,"aspectChooser"))
+  lst$aspect = aspectVal
+  ## type
+  typeVals <- svalue(tag(obj,"typeChooser"))
+  if(length(typeVals) > 0)
+    lst$type = typeVals
+  ## color
+  colVal <- svalue(tag(obj,"colChooser"))
+  if(colVal != "")
+    lst$col = colVal
+
   ## plot
   if(!is.null(lst$x)) {
     x = try(do.call(FUN, lst), silent=TRUE)
@@ -288,6 +329,12 @@ updatedLatticeExplorer = function(object,...) {
 }
 
 
+updateLatticeOptions = function(obj) {
+  svalue(tag(obj,"aspectChooser")) <- 1
+  svalue(tag(obj,"typeChooser")) <- c()
+  svalue(tag(obj,"colChooser"), index=TRUE) <- 1
+}
+
 clearPlot = function(obj) {
   tag(obj,"varlist") <- list()
   dropHandlers = tag(obj,"dropHandlers")
@@ -298,6 +345,7 @@ clearPlot = function(obj) {
     tag(obj,"dropHandlers") <- list()
   }
   updatePanel(obj)
+  updateLatticeOptions(obj)
   panelChooser = tag(obj,"panelChooser"); svalue(panelChooser, index=TRUE)<-1  
   updatedLatticeExplorer(obj)
 }

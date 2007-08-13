@@ -4,12 +4,13 @@
 ## * dynamic response to change of variables
 ## * visible output, students don't like quiet GUIs
 
-is.gdataframecolumn = function(obj) {
-  if(class(obj)[1] == "GtkTreeViewColumn")
-    return(TRUE)
-  else
-    return(FALSE)
-}
+## in misc.R
+## is.gdataframecolumn = function(obj) {
+##   if(class(obj)[1] == "GtkTreeViewColumn")
+##     return(TRUE)
+##   else
+##     return(FALSE)
+## }
 
 ## make a graphic save to png file, return file name
 dp = function(x,probs=NULL,

@@ -1,5 +1,7 @@
 ### Define the main menu here
 
+
+
 pmg.menu = list()
 pmg.menu$File$"Source file.."$handler =
   function(h,...) gfile("Source file",type="open", action="source")
@@ -106,7 +108,18 @@ pmg.menu$Data$"Random data"$"Random samples"$handler = function(h,...)
 pmg.menu$Data$"Random data"$"Sample"$handler =
   function(h,...) pmg.gw(sample.list)
 ##
-if(do.call("require",list("reshape"))) {
+
+##########
+## Simulation. What else?
+pmg.menu$Data$Simulation$"Repeat trials"$handler = function(h,...) {
+  add(pmg.dialog.notebook, repeatTrialsGUI(), label = "Repeat trials")
+}
+
+
+
+
+## Manipulate
+if("reshape" %in% .packages(TRUE)) {
   pmg.menu$Data$"Manipulate"$reshape$melt$handler = function(h,...) pmg.meltGUI()
   pmg.menu$Data$"Manipulate"$reshape$cast$handler = function(h,...) pmg.castGUI()
 }
@@ -235,12 +248,19 @@ pmg.menu$Plots$"Add to graphic"$"title"$handler =
 
 
 ## iplots conditionally
-if(do.call("require",list("iplots"))) {
+if("iplots" %in% .packages(TRUE)) {
   pmg.menu$Plots$"iplots"$handler = function(...) {
     pmg.iplots()
   }
 }
-  
+
+## qqplot2 conditionally
+if("ggplot2" %in% .packages(TRUE)) {
+  pmg.menu$Plots$"qplot"$handler = function(...) {
+    qplotGUI(container=pmg.dialog.notebook, label = "qplot()")
+  }
+}
+
 pmg.menu$Plots$"Teaching demos"$handler =
   function(h,...) pmg.teachingDemos()
 ###

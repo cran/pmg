@@ -1,3 +1,75 @@
+
+checkForUpdatesGUI = function() {
+  win = gwindow("Check for updates", visible=FALSE)
+  g = ggroup(horizontal = FALSE, cont=win)
+  l = glabel(".-.-.-", cont=g, expand=TRUE)
+  sb = gstatusbar("Checking for updates", cont=g)
+  visible(win) <- TRUE
+  
+  val = checkForUpdates()
+  if(length(val) == 0)
+    svalue(l) <- "All the main pmg packages are up to date"
+  else
+    svalue(l) <- paste("You can upgrade", paste(val,sep=", "),".",sep=" ")
+  svalue(sb) <- ""
+}
+
+checkForUpdates = function() {
+  ## find any packages needing updates
+
+  if(getCranSiteIfNeeded()) {
+  
+    thePackages = c("pmg","gWidgets","gWidgetsRGtk2","cairoDevice")
+    
+    oldPackages = old.packages()
+    
+    updateThese = thePackages[which(thePackages %in% rownames(oldPackages))]
+    
+    if(length(updateThese) > 0) {
+      return(oldPackages[updateThese,"Package"])
+    } else {
+      return(c())
+    }
+  } else {
+    cat("You need to set a CRAN repository to proceed\n")
+  }
+  
+}
+
+getCranSiteIfNeeded = function() {
+  repos = getOption("repos")
+  if ("@CRAN@" %in% repos) {
+  
+    setCRAN <- function(URL) {
+      repos = getOption("repos")
+      repos["CRAN"] <- gsub("/$", "", URL)
+      options(repos=repos)
+    }
+    
+    
+    handler = function(h,...) {
+      URL <- svalue(tbl) # get value  widget
+      cat("Set CRAN site to",URL,"\n")
+      setCRAN(URL)       # set URL
+    }
+
+    g = ggroup(horizontal = FALSE, cont = NULL)
+    glabel("Select a site\nthen click 'OK'", cont=g)
+    tbl <- gtable(
+                  items=utils:::getCRANmirrors(),
+                  chosencol=4,     
+                  filter.column=2,
+                  container=g,
+                  )
+    size(tbl) <- c(200,300)
+    gbasicdialog(title="Select a CRAN site", widget=g, handler=handler)
+  } else {
+    return(TRUE)
+  }
+}
+
+#########################################
+
 pmg.about = function(container=NULL) {
 
 ## image is group pmg via www.geom.uiuc.edu/~dpvc
@@ -22,7 +94,10 @@ pmg.about = function(container=NULL) {
                theFactsMam[1,"Description"],
                "\n"
                ), markup=TRUE, container=group)
-
+  addSpring(group, 10)
+  gbutton("Check for updates", container = group,
+          handler = function(...) checkForUpdatesGUI())
+  
   return(group)
 }
 

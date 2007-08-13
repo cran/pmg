@@ -393,7 +393,8 @@ updatedHtest = function(object, ...) {
       return()
     } else if(n == 1) {
       ## need another
-      x$data.name = Paste(id(dataVarList[[1]])," and Drop variable here")
+#      x$data.name = Paste(id(dataVarList[[1]])," and Drop variable here")
+      tmp = Paste(id(dataVarList[[1]])," and Drop variable here")
       svalue(object.list[["data.name"]]) <-  format(tmp)
     } else  {                           # n > 1
       theXName = id(dataVarList[[n-1]])
@@ -580,7 +581,7 @@ dHtest = function(x, type=NULL, digits = 4, container = NULL, ...) {
   object.list = list()
   for(i in passiveComponents) {
     object.list[[i]] = glabel("*")
-    font(object.list[[i]]) <-list(colors="red")
+    font(object.list[[i]]) <-list(color="red")
   }
   for(i in activeComponents) {
     object.list[[i]] = glabel("*", editable=TRUE)
