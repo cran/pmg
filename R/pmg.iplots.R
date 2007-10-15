@@ -272,7 +272,7 @@
     curPlotType = getCurrentPlotNameType()[2]
     if(addThis == "ilines") {
       ## give option to add to scatterplot, or provide x, y
-      win = gwindow("Add lines to current iplot")
+      win = pmgWC$new("Add lines to current iplot")
       gp = ggroup(horizontal = FALSE, cont=win, raise.on.dragmotion = TRUE)
       if(curPlotType == "ixyplot") {
         spframe = gframe("Add trend line",horizontal=FALSE,cont=gp)
@@ -397,7 +397,7 @@
 }
   
 
-pmg.iplots = function(container = gwindow("PMG: iplots interface"), envir=.GlobalEnv) {
+pmg.iplots = function(container = pmgWC$new("PMG: iplots interface"), envir=.GlobalEnv) {
 
   do.call("require",list("iplots"))                       # load if not loaded
   
@@ -431,7 +431,7 @@ pmg.iplots = function(container = gwindow("PMG: iplots interface"), envir=.Globa
       is.data.frame(get(i, envir=envir)))]
     
     if(length(addDfs) > 0) {
-      win = gwindow("Make a new iset around this data frame")
+      win = pmgWC$new("Make a new iset around this data frame")
       gp = ggroup(horizontal=FALSE, cont=win)
       add(gp, glabel("Double click on a data frame"))
       

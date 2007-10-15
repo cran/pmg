@@ -48,7 +48,7 @@ pmg.help = function(h,...) {
 
 ## function for generic widget usage
 pmg.gw = function(lst, label=NULL) {
-  if(is.null(lst$variableTypeExtra)) {
+  if(!is.list(lst) || is.null(lst$variableTypeExtra)) {
     widget = ggenericwidget(lst, container=NULL, cli=pmg.cli,help.cb = pmg.help)
   } else {
     argList = list(lst=lst,cli = pmg.cli,helphandler=pmg.help, container=NULL)
@@ -134,7 +134,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
      !is.gWindow(pmg.dialogs.window) ||
      is.invalid(pmg.dialogs.window)
      ) {
-    assignInNamespace("pmg.dialogs.window", gwindow("P M G Dialogs", visible=FALSE), "pmg")
+    assignInNamespace("pmg.dialogs.window", pmgWC$new("P M G Dialogs", visible=FALSE), "pmg")
     size(pmg.dialogs.window) <- c(width, height)
   } else {
     ## raise window, exit
@@ -204,6 +204,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
   toolbar$quit$handler = function(h,...) {
     dispose(pmg.dialogs.window)
     assignInNamespace("pmg.dialogs.window", NULL,"pmg")
+#    pmgWC$closeAll()
     pmg.closeAll()
   }
   toolbar$quit$icon = "quit"
@@ -223,7 +224,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
          !is.gWindow(pmg.plotnotebook.window) ||
          is.invalid(pmg.plotnotebook.window)
          ) {
-        assignInNamespace("pmg.plotnotebook.window", gwindow("P M G plot notebook", visible=TRUE ),"pmg")
+        assignInNamespace("pmg.plotnotebook.window", pmgWC$new("P M G plot notebook", visible=TRUE ),"pmg")
         add(pmg.plotnotebook.window, ggraphicsnotebook())
       } else {
         focus(pmg.plotnotebook.window) <- TRUE

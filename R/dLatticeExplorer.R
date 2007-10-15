@@ -114,7 +114,7 @@ dLatticeExplorer = function(
     })
   svalue(plotChooser) <- "densityplot"
 
-  panelChooser = gdroplist(c("panel="), container = gdButtons,
+  PanelChooser = gdroplist(c("panel="), container = gdButtons,
      action = obj,
      handler = function(h,...) {
        panel.FUN = svalue(h$obj)
@@ -125,7 +125,7 @@ dLatticeExplorer = function(
        updatedLatticeExplorer(obj)
      })
   tag(obj,"plotChooser") <-  plotChooser
-  tag(obj,"panelChooser") <-  panelChooser
+  tag(obj,"PanelChooser") <-  PanelChooser
 
 
   glabel("aspect=", cont=latticeOptionsGroup)
@@ -346,21 +346,23 @@ clearPlot = function(obj) {
   }
   updatePanel(obj)
   updateLatticeOptions(obj)
-  panelChooser = tag(obj,"panelChooser"); svalue(panelChooser, index=TRUE)<-1  
+  PanelChooser = tag(obj,"PanelChooser"); svalue(PanelChooser, index=TRUE)<-1  
   updatedLatticeExplorer(obj)
 }
 
 makeEmptyPlot = function(obj, message="Drop variable(s) here") {
 #  visible(obj) <- TRUE
-  plot.new()
-  plot.window(xlim=c(0,1),ylim=c(0,1))
-  text(1/2, 1/2, message)
+  x = try(plot.new(), silent=TRUE)
+  if(!inherits(x,"try-error")) {
+    plot.window(xlim=c(0,1),ylim=c(0,1))
+    text(1/2, 1/2, message)
+  }
 }
 
 clearPanel = function(obj) {
-  panelChooser = tag(obj,"panelChooser") # keep in object
-  if(!is.null(panelChooser)) {
-    panelChooser[]<- c("panel=")
+  PanelChooser = tag(obj,"PanelChooser") # keep in object
+  if(!is.null(PanelChooser)) {
+    PanelChooser[]<- c("panel=")
     tag(obj,"panel") <-  NA
   }
 }
@@ -369,11 +371,11 @@ clearPanel = function(obj) {
 updatePanel = function(obj) {
   FUN = tag(obj,"function")
   funs = tag(obj,"availPanelFuns")[[FUN]]
-  panelChooser = tag(obj,"panelChooser") # kept in object
+  PanelChooser = tag(obj,"PanelChooser") # kept in object
   if(!is.null(funs))
-    panelChooser[] <- c("panel=",funs)
+    PanelChooser[] <- c("panel=",funs)
   else
-    panelChooser[] <- c("panel=")
+    PanelChooser[] <- c("panel=")
 }
 
 

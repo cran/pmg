@@ -1,11 +1,14 @@
+## NOT WORKING!!! -- can't get eval command to work. Gives
+## error about scale
+
 qplotGUI = function(container = NULL, ...) {
   do.call("require",list("ggplot2"))
   
   ## globals
   widgets = list()
   extraArgsWidgets = list()
-  geomVals1d = c("histogram","density")
-  geomVals2d = c("point","smooth","boxplot","quantile","line","path","density2d","jitter")
+  geomVals1d = data.frame(geoms=c("histogram","density"),stringsAsFactors=FALSE)
+  geomVals2d = data.frame(geoms=c("point","smooth","boxplot","quantile","line","path","density2d","jitter"), stringsAsFactors=FALSE)
   
   
   ## handler for getting variable using either data or globalenv
@@ -16,10 +19,10 @@ qplotGUI = function(container = NULL, ...) {
     if(dfName != "") {
       ## there is a data frame
       df = get(dfName, envir=.GlobalEnv)
-      ret = with(df, eval(parse(text=str)))
+      ret = with(df, try(eval(parse(text=str)), silent=TRUE))
     } else {
       ## get from global environment
-      eval(parse(text=str), envir=.GlobalEnv)
+      try(eval(parse(text=str), envir=.GlobalEnv), silent=TRUE)
     }
     return(ret)
   }
@@ -161,7 +164,7 @@ qplotGUI = function(container = NULL, ...) {
         if(!inherits(tmp,"try-error")) theNames = names(theData)
       }
     }
-    
+
     ## add to x, y, fresp, fpred, colour, size, linetype
     if(length(theNames) > 0) 
       sapply(c("x","y","weights"), ##,"colour","size", "shape","linetype"),
@@ -176,6 +179,7 @@ qplotGUI = function(container = NULL, ...) {
   
   updateGeoms = function(...) {
     yVal = svalue(widgets[['y']])
+    cat("DEBUG: what is yval:",yVal,"\n")
     if(yVal == "")
       widgets[['geom']][,] <- geomVals1d
     else
@@ -266,7 +270,7 @@ qplotGUI = function(container = NULL, ...) {
                         "seq(.10,.90,by=.10)",
                         "seq(.25,.75,by=.25)"),
                       coerce.with = function(str) {
-                        ifelse(str=="","",eval(parse(text=str)))
+                        ifelse(str=="","",try(eval(parse(text=str)),silent=TRUE))
                       },
                       handler = updateGraphic,
                       editable=TRUE, cont=tmp)
@@ -333,31 +337,39 @@ qplotGUI = function(container = NULL, ...) {
   updateGraphic = function(...) {
     ## first make sure this is current
     updateExtraArgs()
-    
+
+
     
     tmp = lapply(widgets, svalue)
+
+    ## updateVarNames
+    updateVarNames(tmp$data)
     
     ## check if we can
     if(length(tmp$geom) == 0 || tmp$x == "") {
       cat("need to specify a variable or geom\n")
       return()
     }
-    
+
+
     l = list()                      # store args here
     if(tmp$data != "") {
       ## there is a data frame
       df = get(tmp$data, envir=.GlobalEnv)
       l$data <- df
-      l$x = with(df, eval(parse(text=tmp$x)))
+      l$x = with(df, try(eval(parse(text=tmp$x)), silent=TRUE))
       ## same for y
       if(tmp$y != "")
-        l$y = with(df, eval(parse(text=tmp$y)))
+        l$y = with(df, try(eval(parse(text=tmp$y)),silent=TRUE))
     } else {
       ## get names from global environment
-      l$x <- eval(parse(text=tmp$x), envir=.GlobalEnv)
+      l$x <- try(eval(parse(text=tmp$x), envir=.GlobalEnv), silent=TRUE)
       if(tmp$y != "")
-        l$y <- eval(parse(text=tmp$x), envir=.GlobalEnv)
+        l$y <- try(eval(parse(text=tmp$x), envir=.GlobalEnv), silent=TRUE)
     }
+
+
+
     ## fix x, y labels
     l$xlab = ifelse(tmp$xlab == "", tmp$x, tmp$xlab)
     l$ylab = ifelse(tmp$ylab == "", tmp$y, tmp$ylab)
@@ -400,66 +412,67 @@ qplotGUI = function(container = NULL, ...) {
       l[[i]] <- tmp[[i]]
     }
     
-    ## debug
-                                        #  tmp = l; tmp$data <- tmp$x <- tmp$y <- NULL; print(tmp) 
-    
     ## make graphic
-    print(do.call("qplot",l))
+    ret = try(print(do.call("qplot",l)), silent=TRUE)
+    if(inherits(ret,"try-error")) {
+      cat("Error with qplot:",ret,"\n")
+      return()
+    }
   }
    
-##   updateGraphic.paste = function(...) {
-##     tmp = lapply(widgets, svalue)
-    
-##     ## check if we can
-##     if(length(tmp$geom) == 0 || tmp$x == "") {
-##       cat("need to specify a variable or geom\n")
-##       return()
-##     }
-    
-##     ## try to paste together all the arguments
-##     ## then call within with
-    
-##     cmd = paste("print(qplot(x=",tmp$x, sep="")
-##     tmp$x <- NULL
-    
-##     pasteIfNotNull = function(lab,val) {
-##       if(!is.null(val) && val != "")
-##         cmd <<- paste(cmd,", ",lab,"=",val, sep="")
-##     }
-    
-##     ## handle y, data, geoms, facets separately
-##     pasteIfNotNull("y", tmp$y)
-##     tmp$y <- NULL
-    
-##     if(tmp$data != "") {
-##       df = get(tmp$data, envir=.GlobalEnv)
-##     } else {
-##       df = .GlobalEnv
-##     }
-##     tmp$data = NULL
-    
-##     ## geoms
-##     pasteIfNotNull("geom",
-##                    paste("c('",paste(tmp$geom, collapse="', '"),"')", sep="")
-##                    )
-##     tmp$geom <- NULL
-##     tmp$args <- NULL
-    
-##     if(tmp$fresp != "" && tmp$fpred != "") 
-##       pasteIfNotNull("facets",paste(tmp$fresp, "~", tmp$fpred, sep="  "))
-##     tmp$fresp <- tmp$fpred <- NULL
-    
-##     ## add the rest
-##     for(i in names(tmp)) {
-##       pasteIfNotNull(i, tmp[[i]])
-##     }
-    
-##     cmd = paste(cmd, "))", sep="")
-    
-##     print(cmd)
-##     with(df, eval(parse(text=cmd)))
-    
-##   }
+  updateGraphic.paste = function(...) {
+    tmp = lapply(widgets, svalue)
+ 
+    ## check if we can
+    if(length(tmp$geom) == 0 || tmp$x == "") {
+      cat("need to specify a variable or geom\n")
+      return()
+    }
+ 
+    ## try to paste together all the arguments
+    ## then call within with
+ 
+    cmd = paste("print(qplot(x=",tmp$x, sep="")
+    tmp$x <- NULL
+ 
+    pasteIfNotNull = function(lab,val) {
+      if(!is.null(val) && val != "")
+        cmd <<- paste(cmd,", ",lab,"=",val, sep="")
+    }
+ 
+    ## handle y, data, geoms, facets separately
+    pasteIfNotNull("y", tmp$y)
+    tmp$y <- NULL
+ 
+    if(tmp$data != "") {
+      df = get(tmp$data, envir=.GlobalEnv)
+    } else {
+      df = .GlobalEnv
+    }
+    tmp$data = NULL
+ 
+    ## geoms
+    pasteIfNotNull("geom",
+                   paste("c('",paste(tmp$geom, collapse="', '"),"')", sep="")
+                   )
+    tmp$geom <- NULL
+    tmp$args <- NULL
+ 
+    if(tmp$fresp != "" && tmp$fpred != "") 
+      pasteIfNotNull("facets",paste(tmp$fresp, "~", tmp$fpred, sep="  "))
+    tmp$fresp <- tmp$fpred <- NULL
+ 
+    ## add the rest
+    for(i in names(tmp)) {
+      pasteIfNotNull(i, tmp[[i]])
+    }
+ 
+    cmd = paste(cmd, "))", sep="")
+ 
+    print(cmd)
+    with(df, eval(parse(text=cmd)))
+ 
+  }
 
 
   ## add handlers

@@ -244,7 +244,8 @@ CLTDemo = list(
     )
   )
 
-
+## start with an assignment
+assign(".binomialDemo.results",c(),envir=.GlobalEnv)
 binomialDemo = list(
   widgets = list(
     "Size of sample, n" = gslider(from=5,to=50,by=5,value=10),
@@ -400,7 +401,7 @@ powerDemo = list(
   )
 
   
-  win = gwindow("P M G teaching demos")
+  win = pmgWC$new("P M G teaching demos")
   group = ggroup(horizontal = FALSE, container=win)
   mb = list()
   mb$Demo$"Histogram bin selection"$handler =

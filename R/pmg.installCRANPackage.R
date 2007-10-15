@@ -11,7 +11,7 @@ pmg.chooseCRANmirror = function(widget = NULL, doing.first=FALSE,...) {
   if(inherits(m, "try-error"))
     m <- read.csv(file.path(R.home("doc"), "CRAN_mirrors.csv"), as.is=TRUE)  
     
-  window=gwindow(title="Select CRAN site", visible=FALSE)
+  window=pmgWC$new(title="Select CRAN site", visible=FALSE)
   size(window) <- c(500,400)
   group = ggroup(horizontal=FALSE, container = window)
 
@@ -127,7 +127,7 @@ pmg.installCRANPackage = function() {
 
   
   ## start with the GUI
-  win = gwindow("Install CRAN packages",v=T)
+  win = pmgWC$new("Install CRAN packages",v=T)
 
   mainGroup = ggroup(horizontal=FALSE, container=win)
   table = glayout(container=mainGroup)

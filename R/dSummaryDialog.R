@@ -6,7 +6,7 @@ dSummaryDialog = function(container=NULL) {
   
   ## default is to have a window
   if(is.null(container))
-    container = gwindow("Dynamic Summaries", visible=TRUE)
+    container = pmgWC$new("Dynamic Summaries", visible=TRUE)
 
   gp = ggroup(horizontal = FALSE, container=container, raise.on.dragmotion = TRUE)
   obj = gp

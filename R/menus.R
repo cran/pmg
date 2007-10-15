@@ -43,6 +43,7 @@ pmg.menu$File$"Set working directory..."$icon = "directory"
 pmg.menu$File$"pmg options..."$handler =
   function(h,...) pmg.options()
 pmg.menu$File$"pmg options..."$icon = "preferences"
+pmg.menu$File$"View window list"$handler = function(h,...) pmgWC$show()
 pmg.menu$File$"Exit pmg"$handler =
   function(h,...)  {
     dispose(pmg.dialogs.window)
@@ -56,12 +57,14 @@ pmg.menu$Data$browseEnv$handler =
   function(h,...) browseEnv()
 pmg.menu$Data$"Load data set..."$handler =
   function(h,...) pmg.viewDataSets()
-pmg.menu$Data$"Import data set..."$"import table..."$handler =
-  function(h,...) pmg.gw(read.table.list)
-pmg.menu$Data$"Import data set..."$"import csv file..."$handler =
-  function(h,...) pmg.gw(read.csv.list)
-pmg.menu$Data$"Import data set..."$"import fwf file..."$handler =
-  function(h,...) pmg.gw(read.fwf.list)
+pmg.menu$Data$"Import data set..."$handler =
+  function(h,...) pmg.specifyFileForImport();
+#pmg.menu$Data$"Import data set..."$"import table..."$handler =
+#  function(h,...) pmg.gw(read.table.list)
+#pmg.menu$Data$"Import data set..."$"import csv file..."$handler =
+#  function(h,...) pmg.gw(read.csv.list)
+#pmg.menu$Data$"Import data set..."$"import fwf file..."$handler =
+#  function(h,...) pmg.gw(read.fwf.list)
 ## dynamic
 pmg.menu$Data$"Dynamic summaries"$handler =
   function(h,...) dSummaryDialog()
@@ -156,7 +159,7 @@ pmg.menu$Data$"Coerce"$"factor"$handler =
 ## Plots
 ## Dynamic widget
 pmg.menu$Plots$"Lattice explorer"$handler = function(h,...) {
-  dLatticeExplorer(container=gwindow("Lattice explorer", v=T))
+  dLatticeExplorer(container=pmgWC$new("Lattice explorer", v=T))
 }
 pmg.menu$Plots$"Lattice explorer"$icon = "execute"
 ###
@@ -254,12 +257,13 @@ if("iplots" %in% .packages(TRUE)) {
   }
 }
 
-## qqplot2 conditionally
-if("ggplot2" %in% .packages(TRUE)) {
-  pmg.menu$Plots$"qplot"$handler = function(...) {
-    qplotGUI(container=pmg.dialog.notebook, label = "qplot()")
-  }
-}
+## Add back in, bu this is causing crashes!
+## ## qqplot2 conditionally
+## if("ggplot2" %in% .packages(TRUE)) {
+##   pmg.menu$Plots$"qplot"$handler = function(...) {
+##     qplotGUI(container=pmg.dialog.notebook, label = "qplot()")
+##   }
+## }
 
 pmg.menu$Plots$"Teaching demos"$handler =
   function(h,...) pmg.teachingDemos()
@@ -360,7 +364,7 @@ help.menu$Help$"About R"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.about.R(),label = "About R")
 help.menu$Help$"About PMG"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.about(),label = "About P M G")
-##pmg.about(container=gwindow(v=TRUE))
+##pmg.about(container=pmgWC$new(v=TRUE))
 help.menu$Help$"About PMG"$icon="about"
 help.menu$Help$"R helpbrowser"$handler =
   function(h,...) {

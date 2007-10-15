@@ -1,6 +1,6 @@
 
 checkForUpdatesGUI = function() {
-  win = gwindow("Check for updates", visible=FALSE)
+  win = pmgWC$new("Check for updates", visible=FALSE)
   g = ggroup(horizontal = FALSE, cont=win)
   l = glabel(".-.-.-", cont=g, expand=TRUE)
   sb = gstatusbar("Checking for updates", cont=g)

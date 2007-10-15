@@ -12,7 +12,7 @@ getPackages = function(...) {
 
 pmg.loadPackages = function(width=300, height=400) {
 
-  win = gwindow("Load or detach packages", v=T)
+  win = pmgWC$new("Load or detach packages", v=T)
   size(win) <- c( width, height)
   group = ggroup(horizontal=FALSE, container=win)
 

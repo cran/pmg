@@ -10,7 +10,7 @@ dModelsDialog = function() {
     )
 
   ## main groups
-  win = gwindow("Models",v=T)
+  win = pmgWC$new("Models",v=T)
   gp = ggroup(horizontal=FALSE, container=win, raise.on.dragmotion = TRUE)
   popupGroup = ggroup(container=gp)
   addSpring(popupGroup)
@@ -373,7 +373,7 @@ dynamicModelWidget = function(
         }
       }
 
-      win = gwindow("Save model object as...", visible=TRUE)
+      win = pmgWC$new("Save model object as...", visible=TRUE)
       gp = ggroup(horizontal=FALSE, container=win)
       glabel("Specify a variable name for the object:", container=gp)
       theName = gedit("",container=gp, handler=saveHandler)

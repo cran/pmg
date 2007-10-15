@@ -1,5 +1,6 @@
 ## write htest interface for showing t.test, etc. with drop
 
+## This is kinda ugly!
 ## TODO
 ## chisq.test, fisher.test, "mantelhaen.test" "mcnemar.test"
 ## * ---- isn't working names is giving unique guys
@@ -55,7 +56,7 @@ dTestsDialog = function() {
   dialogList[["FirstOne"]] = glabel("Select a test from popup")
   
   
-  win = gwindow("Dynamic tests",handler = function(h,...) {
+  win = pmgWC$new("Dynamic tests",handler = function(h,...) {
     for(i in dialogList) {
       ids = tag(i,"dropHandlers")
       if(!is.null(ids))
@@ -349,13 +350,12 @@ gui.htest = function(
 updatedHtest = function(object, ...) {
   obj = object                          # for s3 consistency
 
-  
   FUN = tag(obj,"FUN")
   extra.args = tag(obj,"extra.args")
   TYPE = tag(obj,"type")
   object.list = tag(obj,"object.list")
   dataVarList = tag(object.list[["data.name"]], "varList")
-
+  x = list()
 
   h0 = as.numeric(svalue(object.list[["null.value"]]))
   hA = svalue(object.list[["alternative"]])
@@ -382,17 +382,19 @@ updatedHtest = function(object, ...) {
     theArgs = list(x = theValues, mu=h0, alternative=hA,
       conf.level=conf.int.name)
     x = try(do.call(FUN,c(theArgs,extra.args)), silent=TRUE)
-
+    if(inherits(x,"try-error")) {
+      cat("Error with function call:",x,"\n")
+    }
     x$data.name = theName             # override
   } else if (TYPE == "bivariate") {
     ## two sample guy
     n = length(dataVarList)
-
     if(n == 0) {
       cat("Drop some variables\n")
       return()
     } else if(n == 1) {
       ## need another
+      cat("Need another\n")
 #      x$data.name = Paste(id(dataVarList[[1]])," and Drop variable here")
       tmp = Paste(id(dataVarList[[1]])," and Drop variable here")
       svalue(object.list[["data.name"]]) <-  format(tmp)
@@ -410,7 +412,9 @@ updatedHtest = function(object, ...) {
         conf.level=conf.int.name)
 
       x = try(do.call(FUN,c(theArgs, extra.args)), silent=TRUE)
-      
+      if(inherits(x,"try-error")) {
+        cat("Error with function call:",x,"\n")
+      }
       x$data.name = Paste(id(dataVarList[[n-1]])," and ",
         id(dataVarList[[n]]))
     }
@@ -468,6 +472,10 @@ updatedHtest = function(object, ...) {
         tmp = all.vars(form)
         form = svalue(tmp[1]) ~ svalue(tmp[2])
         x = try(do.call(FUN,list(form)), silent=TRUE)
+        if(inherits(x,"try-error")) {
+          ## What to do with an error:
+          cat("Error with function call:",x,"\n")
+        } 
         x$data.name = Paste(tmp[1], " ~ ", tmp[2])
       } else if(n == 1) {
         tmp = Paste(id(dataVarList[[1]])," and drop variable here")
@@ -501,12 +509,25 @@ updatedHtest = function(object, ...) {
           theName = "Need one numeric variable and one factor"
         }
 
-        argList$alternative = hA
-        argList$conf.level=conf.int.name
-        
+        ## don't do this *if* FUN=...
+        ## these funs don't take alter or conf.level
+        if(FUN %in% c("oneway.test","kruskal.test")) {
+          argList$alternative = NULL
+          argList$conf.level = NULL
+        } else {
+          argList$alternative = hA
+          argList$conf.level=conf.int.name
+        }          
+
         
         x = try(do.call(FUN,c(argList, extra.args)), silent=TRUE)
+        if(inherits(x,"try-error")) {
+          ## What to do with an error:
+          cat("Error with function call:",x,"\n")
+        } 
+
         x$data.name = theName
+
       }
     }
 

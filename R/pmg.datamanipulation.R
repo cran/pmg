@@ -131,7 +131,7 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
   allTypes = c("","numeric","integer","character","factor","logical")
 
 
-  win = gwindow("Edit data frame properties")
+  win = pmgWC$new("Edit data frame properties")
   g = ggroup(horizontal=FALSE, cont = win)
 
   lg = ggroup(cont=g)

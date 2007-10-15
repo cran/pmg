@@ -10,7 +10,7 @@ pmg.helppagebrowser = NA
 ### RSiteSearch Dialog
 RSiteSearch.Dialog = function() {
   ## RSiteSearch
-  win = gwindow("RSiteSearch()", visible=TRUE)
+  win = pmgWC$new("RSiteSearch()", visible=TRUE)
   
   table = glayout()
   spacinggroup = ggroup(horizontal=FALSE)
@@ -72,7 +72,7 @@ viewVignettes.Dialog = function() {
     handler = defaultHandler
   )
 
-  win = gwindow("View vignette",v=T)
+  win = pmgWC$new("View vignette",v=T)
   gp = ggroup(horizontal=FALSE, container=win)
   add(gp, vignetteList, expand=TRUE)
   buttonGroup = ggroup(container=gp)
@@ -92,7 +92,7 @@ viewDemos.Dialog = function() {
     do.call("demo",list(topic=item[1,2,drop=TRUE], package=item[1,1,drop=TRUE]))
   })
   ## create widget
-  win = gwindow("View demo in command line",v=T)
+  win = pmgWC$new("View demo in command line",v=T)
   gp = ggroup(horizontal=FALSE, container=win)
   add(gp, demoList, expand=TRUE)
   buttonGroup = ggroup(container=gp)

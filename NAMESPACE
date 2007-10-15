@@ -18,3 +18,4 @@ S3method("skewness","character")
 S3method("skewness","factor")
 S3method("skewness","list")
 S3method("skewness","data.frame")
+

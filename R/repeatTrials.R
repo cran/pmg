@@ -41,7 +41,7 @@ repeatTrialsGUI = function(container = NULL) {
   addSpace(bg, 10)
   .help <- gbutton("help", cont= bg, handler = function(h,...) {
     ghelp("repeatTrials",package="pmg",
-          container = gwindow("repeatTrials", width=400, height=250))
+          container = pmgWC$new("repeatTrials", width=400, height=250))
   })
   
   visible(tbl) <- TRUE

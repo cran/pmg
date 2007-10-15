@@ -7,7 +7,7 @@ getDataSets = function(...) {
 ## uses data() to move data set into environment
 pmg.viewDataSets = function(width=400, height=400) {
   
-  win = gwindow("Load data set", v=T)
+  win = pmgWC$new("Load data set", v=T)
   size(win) <-  c( width, height)
   group = ggroup(horizontal=FALSE, container=win)
 

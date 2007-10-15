@@ -204,7 +204,7 @@ dpqrfuncs = function(type=c("p","d","q","r"), container=NULL) {
   addhandlerchanged(helpButton, handler = function(h,...) {
     theFunc = svalue(distSelector)
     theDist = substr(theFunc,2,stop=nchar(theFunc))    
-    ghelp(helpPage[theDist], container=gwindow(paste("Help on",theFunc)))
+    ghelp(helpPage[theDist], container=pmgWC$new(paste("Help on",theFunc)))
   })
 
   ##

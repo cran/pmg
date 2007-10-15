@@ -80,7 +80,8 @@ quantileWidget = function(container=NULL) {
   tbl[1,2] = xVar
 
   tbl[2,1] <- glabel("probs:")
-  probsVar = gedit("c()")
+  probsVar = gdroplist(c("c()","c(.25,.5,.75)","seq(.2,.8,by=.2)",
+    "seq(.1,.9,by=.1)","seq(.05,.95,by=.05)"))
   tag(obj,"probsVarData") <- NULL
   tbl[2,2] = probsVar
 
