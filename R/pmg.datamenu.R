@@ -8,7 +8,7 @@ dataViewer.list = list(
     ending = ")"
     ),
   variableType = NULL,
-  type = text,                      # either text or graphic
+  type = "text",                      # either text or graphic
   arguments = list(
     arguments = list(
       dataset = list(

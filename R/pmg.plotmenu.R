@@ -726,8 +726,7 @@ xyplot.list = list(
     arguments = list(                   # types in genericWidget
       panel = EMPTY.list
       ),
-    jitter = list(
-      jitter = FALSE.list,
+    jitter = list(      jitter = FALSE.list,
       factor = EMPTY.list
       ),
     labels = labels.list

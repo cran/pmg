@@ -1,3 +1,4 @@
+require(proto)
 ## stuff to make generic widgets
 
 

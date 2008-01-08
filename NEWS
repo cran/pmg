@@ -1,0 +1,16 @@
+Dear Emacs, please make this -*-Text-*- mode!
+
+NEWS for pmg
+Changes for 0.9-37
+------------------------
+
+* different numbering to address mixed-up upload to CRAN.
+
+Changes for 0.9-37
+------------------------
+
+* put LazyLoad: FALSE to get proto stuff to work with R-2.7.0
+
+* found spurious bug with unquoted value of text
+
+* spiffy new NEWS file

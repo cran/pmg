@@ -190,15 +190,15 @@ CLTDemo = list(
     
     switch(Distribution,
            "Normal" = {
-             curve(dnorm(x), from=-3, to = 3)
+             curve(dnorm(x), from=-3, to = 3, lwd=2)
              abline(v=0)
            },
            "Long tailed" = {
-             curve(dt(x,df=3), from = -3.5, to = 3.5)
+             curve(dt(x,df=3), from = -3.5, to = 3.5, lwd=2)
              abline(v=0)
            },
            "Skewed" = {
-             curve(dexp(x), from = 0, to = 3)
+             curve(dexp(x), from = 0, to = 3, lwd=2)
              if(Statistic == "mean")
                abline(v=1)
              else
@@ -223,7 +223,7 @@ CLTDemo = list(
       y = i*ySize/m
       points(theSample, rep(y, n), col=gray(.6))
       tmp[i] = do.call(Statistic, list(theSample))
-      points(tmp[i], y, pch=17, cex=2,col=gray(.6))
+      points(tmp[i], y, pch=17, cex=2,col=gray(.8)) # lighter
     }
 
     ## plot sample at bottom with rug
@@ -431,7 +431,7 @@ powerDemo = list(
     }
   mb$Demo$"probability calculator"$handler = 
     function(...) {
-      add(nb, probabilityCalculator(NULL), label = "probaiblity calculator")
+      add(nb, probabilityCalculator(NULL), label = "probability calculator")
       svalue(sb) <- ""
     }
   mb$Demo$"Confidence Intervals"$handler =

@@ -3,6 +3,7 @@
 \alias{kurtosis}
 \alias{skewness}
 \alias{plotecdf}
+\alias{summarized.t.test}
 \title{Undocumented, but exported, functions}
 \description{
   These functions are used in the global environemt and so must be

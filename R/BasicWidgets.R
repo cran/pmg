@@ -20,6 +20,7 @@
 ##   or write makeButtons(.,container)
 ## statusbar: set statusbarText to get
 
+require(proto)
 BasicGUI = proto(
   new = function(., message = "Basic GUI",...) {
      .$proto(message=message,...)
@@ -124,7 +125,7 @@ BasicGUI = proto(
   statusbarText = NULL,                 # non-null for statusbar
   statusbar = NULL,
   getStatusbar = function(.) return(.$statusbar),
-  setStatusbar = function(.,text) svalue(.$statusbar) <- text,
+  setStatusbar = function(.,value) svalue(.$statusbar) <- value,
   ## gwindow stuff
   window = NULL,                      # top-level gwindow
   ## properties

@@ -47,16 +47,16 @@ dSummaryDialog = function(container=NULL) {
   glabel("Select summary:",container=popupGroup)
 
   ## changes here need to propogate to indices below
-  univariateSummaries = c("summary","length","mean","median","mad","sd","IQR","range","skewness","kurtosis")
+  univariateSummaries = c("summary","length","mean","median","sd","IQR","mad","range","skewness","kurtosis")
   bivariateSummaries = c("cor")
   actionPopup = gdroplist(
 #    c("Clear variables",
     c("--- Summary ---",
       univariateSummaries[1:2],
       "--- Center ---",
-      univariateSummaries[3:5],
+      univariateSummaries[3:4],
       "--- Spread ---",
-      univariateSummaries[6:8],
+      univariateSummaries[5:8],
       "--- Shape ---",
       univariateSummaries[9:length(univariateSummaries)],
       "--- Bivariate ---",

@@ -71,7 +71,12 @@ pmg.eval(command, assignto=NULL)
 	  Commands area to be evaluated. Evaluation is done in the
 	  global environment.}
 	}
-}
+      }
+
+      \references{See
+	\url{http://www.amstat.org/publications/jse/v16n1/verzani.html}
+	for a description of the dynamic dialogs in pmg.
+	}
 %%\value{}
 \author{John Verzani}
 \examples{

@@ -6,6 +6,7 @@ export(pmg.eval)
 export(pmgRepeatTrials)
 export(plotecdf)
 export(kurtosis)
+export(summarized.t.test)
 
 S3method("kurtosis","default")
 S3method("kurtosis","character")

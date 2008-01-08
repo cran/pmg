@@ -102,7 +102,7 @@ winCollector$summary = function(.) { ## return df with window names
 ## new window, added to 
 winCollector$new = function(.,...) {
   w <- gwindow(...)
-  ID = .$register(w)
+  ID <- .$register(w)
   addHandlerUnrealize(w,action=ID, handler = function(h,...) {
     .$delete(ID=h$action)
   })

@@ -218,7 +218,8 @@ pmg = function(cliType="console", width=850, height=.75*width,
   toolbar$save$icon = "save"
 
   ## plot notebook
-  if(guiToolkit == "RGtk2" && require(cairoDevice)) {
+  ### XXX This is an issue: cairoDevice needs to be 
+##  if(guiToolkit == "RGtk2" && require(cairoDevice)) {
     toolbar$plotnotebook$handler = function(h,...) {
       if(is.null(pmg.plotnotebook.window) ||
          !is.gWindow(pmg.plotnotebook.window) ||
@@ -231,7 +232,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
       }
     }
     toolbar$plotnotebook$icon = "plot"
-  }
+##  }
 
   toolbar$tmp2$separator = TRUE
 
