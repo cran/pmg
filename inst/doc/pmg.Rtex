@@ -41,6 +41,8 @@
 \author{John Verzani\\\url{pmgRgui@gmail.com}}
 \maketitle
 
+[This vignette is in need of updating!]
+
 \section*{Abstract:}
 
 The \RCode{pmg} package provides a simple GUI for R using the GTK2

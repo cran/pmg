@@ -401,29 +401,55 @@ powerDemo = list(
   )
 
   
-  win = pmgWC$new("P M G teaching demos")
-  group = ggroup(horizontal = FALSE, container=win)
+  win = pmgWC$new("P M G teaching demos", width=450,height=350)
+  group = ggroup(horizontal = FALSE, container=win, expand=TRUE)
   mb = list()
   mb$Demo$"Histogram bin selection"$handler =
-    function(...) add(nb,pmgDemo(histogramDemo),label="Histogram")
+    function(...) {
+      add(nb,pmgDemo(histogramDemo),label="Histogram")
+      svalue(sb) <- ""
+    }
   mb$Demo$"histogram and density"$handler = 
-    function(...) add(nb, histogramAndDensity(NULL), label = "View histogram and density")
+    function(...) {
+      add(nb, histogramAndDensity(NULL), label = "View histogram and density")
+      svalue(sb) <- ""
+    }
   mb$Demo$"Binomial distribution"$handler =
-    function(...) add(nb,pmgDemo(binomialDemo), label="Binomial")
+    function(...) {
+      add(nb,pmgDemo(binomialDemo), label="Binomial")
+      svalue(sb) <- ""
+    }
   mb$Demo$"construction of normal"$handler = 
-    function(...) add(nb, constructionOfNormal(NULL), label = "See normal from sum")
+    function(...) {
+      add(nb, constructionOfNormal(NULL), label = "See normal from sum")
+      svalue(sb) <-  ""
+    }
   mb$Demo$"Central Limit Theorem"$handler =
-    function(...) add(nb,pmgDemo(CLTDemo), label="CLT")
+    function(...) {
+      add(nb,pmgDemo(CLTDemo), label="CLT")
+      svalue(sb) <-  ""
+    }
   mb$Demo$"probability calculator"$handler = 
-    function(...) add(nb, probabilityCalculator(NULL), label = "probaiblity calculator")
+    function(...) {
+      add(nb, probabilityCalculator(NULL), label = "probaiblity calculator")
+      svalue(sb) <- ""
+    }
   mb$Demo$"Confidence Intervals"$handler =
-    function(...) add(nb, pmgDemo(confIntervalDemo), label = "Confidence intervals")
+    function(...) {
+      add(nb, pmgDemo(confIntervalDemo), label = "Confidence intervals")
+      svalue(sb) <- ""
+    }
   mb$Demo$"Power of test"$handler =
-    function(...) add(nb, pmgDemo(powerDemo), label = "Power of a test")
+    function(...) {
+      add(nb, pmgDemo(powerDemo), label = "Power of a test")
+      svalue(sb) <-  ""
+    }
 
 
   add(group, gmenu(mb))
   nb = gnotebook(closebuttons=TRUE)
   add(group, nb, expand=TRUE)
+
+sb <- gstatusbar(gettext("Select a demo from the menubar above"), cont=group)
 }
                 

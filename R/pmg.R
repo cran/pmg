@@ -152,7 +152,7 @@ pmg = function(cliType="console", width=850, height=.75*width,
 
 
   ## Main layout
-  mainGroup = ggroup(horizontal = FALSE, spacing=0, container=pmg.dialogs.window)
+  mainGroup = ggroup(horizontal = FALSE, spacing=0, container=pmg.dialogs.window, expand=TRUE)
 
   add(mainGroup, pmg.menuBar)
   ## optional menu for user The user menu is a named list, the

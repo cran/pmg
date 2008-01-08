@@ -118,112 +118,147 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
   
 }
 
-.editDFProperties = function(dfName) {
-  
-  df = try(get(dfName, envir=.GlobalEnv))
 
-  ## check that df is there
+
+.editDFProperties = function(dfname,envir=.GlobalEnv) {
+  dlg = BasicGUI$new(sprintf("Edit properties for %s.",dfname))
+
+  ## some defs
+  dlg$allTypes = c("","numeric","integer","character","factor","logical")
+  dlg$getType = function(.,i) head(class(i),n=1)
+
+
+
+  ## validate name
+  df = try(get(dfname,envir=envir), silent=TRUE)
   if(inherits(df,"try-error")) {
-    gmessage("Can't find a data frame with that name in the global environment.")
+    cat("Need to have a data frame name.\n")
     return()
   }
-    
-  allTypes = c("","numeric","integer","character","factor","logical")
 
 
-  win = pmgWC$new("Edit data frame properties")
-  g = ggroup(horizontal=FALSE, cont = win)
-
-  lg = ggroup(cont=g)
+  ## Store the data. We make changes to df as we update
+  dlg$dfname <- dfname
+  dlg$df <- df                          # make a copy
+  
+  dlg$colTypes = function(.) sapply(.$df,getType)
 
   
-  allNames = gdroplist(names(df), selected = 0)
-  newName = gedit("")
-  newType = gdroplist(allTypes, selected = 1)
+  ## Display dialog
+  dlg$makeBody = function(., container) {
+    g <- ggroup(horizontal=FALSE, cont=container, expand=TRUE)
+    glabel(gettext("Edit names and column types"),cont=g)
+    tbl <- glayout(cont=g, expand=TRUE)
 
-  
-  tbl = glayout(cont=g)
-  tbl[1,1] = glabel("Which column?")
-  tbl[1,2] = allNames
-
-  tbl[2,1] = glabel("new type:")
-  tbl[2,2] = newType
-
-  tbl[3,1] = glabel("new name:")
-  tbl[3,2] = newName
-
-  visible(tbl) <- TRUE
-
-
-  add(g, gseparator())
-  sg = ggroup(cont=g)
-  saveButton = gbutton("save", cont=sg)
-  glabel("data frame as:", cont=sg)
-  newDfName = glabel(dfName, editable=TRUE, cont=sg)
-  font(newDfName)<-list(style="bold")
-
-  ## now add handlers
-  addhandlerchanged(allNames, handler = function(h,...) {
-    theColName = svalue(allNames)
-    svalue(newName) <- theColName
-    theData = df[,theColName,drop=TRUE]
-    theClass = class(theData)[1]
-    if(any(theClass == allTypes)) 
-      svalue(newType) <- theClass
-    else
-      svalue(newType, index=TRUE) <- 1
-    return(FALSE)
-  })
-
-  addhandlerchanged(newName, handler = function(h,...) {
-    theColName = svalue(allNames)
-    theNewName = svalue(newName)
-    theColNo = which(theColName == names(df))
-    names(df)[theColNo] <<- theNewName  
-
-    allNames[] <- names(df)
-    svalue(newName) <- ""
-    svalue(newType, index=T) <- 1
-    return(FALSE)
-  })
-
-  addhandlerchanged(newType, handler = function(h,...) {
-    theNewType = svalue(newType)
-    theColName = svalue(allNames)
-    theColNo = which(theColName == names(df))
-    n = ncol(df)
+    tbl[1,1] <- "Which column:"         # no ?, : ala apple
+    tbl[1,2] <- (.$columnDroplistGroup <- ggroup(cont=tbl))
+    .$columnDroplist <- gdroplist(names(.$df), cont=.$columnDroplistGroup)
     
-    theData = df[,theColNo]
-    oldType = class(theData)[1]
-    if(theNewType != "" && theNewType != oldType) {
-      theData = do.call(paste("as.",theNewType,sep="",collapse=""),list(theData))
+    tbl[2,1] <- "Column type:"
+    tbl[2,2] <- (.$columnTypeDroplist <- gdroplist(.$allTypes, cont=tbl))
+    svalue(.$columnTypeDroplist) <- .$getType(.$df[,1]) ## initialize
 
-      if(theColNo > 1 && theColNo < n) {
-        newDF = data.frame(df[,1:(theColNo-1),drop=FALSE], theData, df[,(theColNo+1):n, drop=FALSE], stringsAsFactors = FALSE)
-      } else if(theColNoNo == 1) {
-        newDF = data.frame(theData, df[,(theColNo+1):n, drop=FALSE], stringsAsFactors = FALSE)
-      } else {
-        newDF = data.frame(df[,1:(theColNo-1), drop=FALSE], theData, stringsAsFactors = FALSE)
+    tbl[3,1] <- "Column name:"
+    tbl[3,2] <- (.$columnNameDroplist <- gedit(names(.$df)[1], cont=tbl))
+
+    visible(tbl) <- TRUE
+
+    gseparator(cont=g)
+
+    ## Show the current data frame
+    .$dfGroup = ggroup(cont=g, expand=TRUE)
+    .$dfShow = gdf(head(.$df), cont=.$dfGroup,expand=TRUE)
+#    enabled(.$dfShow) <- FALSE
+    
+    bg <- ggroup(cont=g)
+    glabel("Save data frame as", cont=bg)
+    .$saveName <- gedit(.$dfname, cont=bg)
+
+    ## helper
+    getIndex = function(.) {
+      svalue(.$columnDroplist, index=TRUE)
+    }      
+
+
+    
+    ## Now add handlers
+    ## change colType
+    addHandlerChanged(.$columnTypeDroplist,action=.,
+                      handler = function(h,...) {
+      ## get current var by index
+      . = h$action
+      ind = getIndex(.)
+      coerceTo = svalue(h$obj)
+      ## commit change
+      .$df[,ind] <- do.call(paste("as.",coerceTo,sep="",collapse=""),
+                            list(.$df[,ind]))
+      updateDF(.)
+    })
+
+    addHandlerChanged(.$columnNameDroplist, action=.,
+                      handler = function(h,...) {
+                        ## handler for updating names
+                        . = h$action
+                        ## get variable index
+                        ind = getIndex(.)
+
+                        newName = make.names(svalue(h$obj))
+                        ## validate
+                        if(newName %in% names(.$df)) {
+                          ## uniqueness not essential for a data frame
+                          ## but is included here. Could leave out
+                          cat(gettext("Specify a new, unique column name\n"))
+                          return(FALSE)
+                        }
+                        ## aok
+                        names(.$df)[ind] <- newName
+                        ## update things
+                        updateDF(.)
+                        updateNames(.,ind)
+                      })
+    ## replace data frame in disply
+    updateDF = function(.) {
+      delete(.$dfGroup, .$dfShow)
+      .$dfShow = gdf(head(.$df), cont=.$dfGroup, expand=TRUE)
+#      enabled(.$dfShow) <- FALSE
+    }
+
+    ## name droplist is trickier
+    updateNames = function(.,ind) {
+      ## now update names droplist, add in handler
+      delete(.$columnDroplistGroup,.$columnDroplist)
+      .$columnDroplist <- gdroplist(names(.$df),container=.$columnDroplistGroup)
+      svalue(.$columnDroplist,index=TRUE) <- ind
+      addHandlerChanged(.$columnDroplist, action=.,
+                        handler = function(h,...) {
+                          . = h$action
+                          ind = svalue(h$obj, index=TRUE)
+                          svalue(.$columnTypeDroplist) <- .$getType(.$df[,ind])
+                          svalue(.$columnNameDroplist) <- names(.$df)[ind]
+                        })
+    }
+    ## initialize -- to add handler, isn't added above
+    updateNames(.,1)
+  }
+  
+  dlg$clearButtonHandler = NULL
+  dlg$okButtonHandler = function(.,h,...) {
+    ## verify that name is okay
+    outputName = svalue(.$saveName)
+    if(outputName %in% ls(envir=.GlobalEnv)) {
+      out = gconfirm(sprintf("There is already a varibable named %s. Overwrite?", outputName))
+      if(!out) {
+        return(FALSE)
       }
-      names(newDF)[theColNo] <- theColName
-      df <<- newDF
     }
-  })
-
-  addhandlerchanged(saveButton, handler = function(h,...) {
-
-    ## change the name, in may not have been
-    theNewName = svalue(newName)
-    if(theNewName != "") {
-      theColName = svalue(allNames)
-      theColNo = which(theColName == names(df))
-      names(df)[theColNo] <<- theNewName  
-    }
-    
-    assign(svalue(newDfName), df, envir=.GlobalEnv)
-    dispose(win)
-  })
+    ## write
+    assign(outputName, df, envir=.GlobalEnv)
+    ## close up
+    dispose(.$window)
+  }
 
 
+  ## now sohw the dialog
+  dlg$show()
 }
-  
+

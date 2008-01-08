@@ -59,6 +59,8 @@ pmg.menu$Data$"Load data set..."$handler =
   function(h,...) pmg.viewDataSets()
 pmg.menu$Data$"Import data set..."$handler =
   function(h,...) pmg.specifyFileForImport();
+pmg.menu$Data$"Write data as CSV file..."$handler =
+  function(h,...) pmg.gw(write.csv.list)
 #pmg.menu$Data$"Import data set..."$"import table..."$handler =
 #  function(h,...) pmg.gw(read.table.list)
 #pmg.menu$Data$"Import data set..."$"import csv file..."$handler =

@@ -81,10 +81,14 @@ BasicGUI = proto(
     addSpring(bg)
     ## for these we take advantage of the fact that when we call
     ## the handlers this way the "." gets passed in via the first argument
-    if(!is.null(cancelButtonHandler))
+    if(!is.null(.$cancelButtonHandler))
       cancelButton = gbutton("cancel", cont=bg,  
         action = list(self=., super=.super),
         handler = .$cancelButtonHandler)
+    if(!is.null(.$clearButtonHandler))
+      clearButton = gbutton("clear", cont=bg,  
+        action = list(self=., super=.super),
+        handler = .$clearButtonHandler)
     if(!is.null(.$okButtonHandler)) 
       okButton = gbutton("ok", cont=bg, 
         action = list(self=., super=.super),
@@ -92,6 +96,8 @@ BasicGUI = proto(
   },
   ## Notice, the signature includes the initial "."
   helpButtonHandler = NULL,             # make a handler if interested
+  cancelButtonHandler = NULL,           # make non-NULL handler
+  clearButtonHandler = NULL,           # make non-NULL handler
   okButtonHandler = function(.,h,...) {
     for(i in names(.$widgetList))  {
       ## store vals in props of super

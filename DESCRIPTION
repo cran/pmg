@@ -1,6 +1,6 @@
 Package: pmg
-Version: 0.9-35
-Date: 2007-10-15
+Version: 0.9-37
+Date: 2008-01-08
 Title: Poor Man's GUI
 Author: by John Verzani with contributions by Yvonnick Noel
 Maintainer: John Verzani <pmgrgui@gmail.com>
@@ -8,7 +8,7 @@ Depends: lattice, MASS, proto, foreign, gWidgets(>= 0.0-22), gWidgetsRGtk2(>= 0.
 Suggests:  cairoDevice
 Enhances: iplots, reshape, ggplot2
 Description: Simple GUI for R using gWidgets. 
-License: GPL version 2 or newer 
+License: GPL (>= 2)
 URL: http://www.math.csi.cuny.edu/pmg
 SaveImage: TRUE
-Packaged: Thu Oct 25 13:31:22 2007; verzani
+Packaged: Thu Jan 10 15:17:13 2008; verzani

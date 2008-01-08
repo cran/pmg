@@ -14,7 +14,7 @@ pmg.loadPackages = function(width=300, height=400) {
 
   win = pmgWC$new("Load or detach packages", v=T)
   size(win) <- c( width, height)
-  group = ggroup(horizontal=FALSE, container=win)
+  group = ggroup(horizontal=FALSE, container=win, expand=TRUE)
 
 
   packageHandler = function(obj) {
@@ -43,14 +43,13 @@ pmg.loadPackages = function(width=300, height=400) {
   }
 
   ## store package into a separate group -- can update
-  packageGroup = ggroup()
-  add(group, packageGroup, expand=TRUE)
+  packageGroup = ggroup(container=group, expand=TRUE)
   packageList = gtable(getPackages(),
     multiple=TRUE, sort.columns = 1:2,
     handler = function(h,...) {
       packageHandler(h$obj)
-    })
-  add(packageGroup, packageList, expand=TRUE)
+    },
+    container=packageGroup, expand=TRUE)
 
   buttonGroup = ggroup(container=group)
   addSpring(buttonGroup)

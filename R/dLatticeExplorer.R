@@ -242,9 +242,9 @@ updatedLatticeExplorer = function(object,...) {
       xlab = varNames[1]; ylab = NULL
       x = ~ svalue(vars[[1]]) | svalue(vars[[2]])
     } else {
-      command = Paste(FUN,"(", varNames[2],"~", varNames[1],")")
-      xlab = varNames[1]; ylab = varNames[2]
-      x = svalue(vars[[2]]) ~ svalue(vars[[1]])
+      command = Paste(FUN,"(", varNames[1],"~", varNames[2],")")
+      xlab = varNames[2]; ylab = varNames[1]
+      x = svalue(vars[[1]]) ~ svalue(vars[[2]])
     }
   }
 

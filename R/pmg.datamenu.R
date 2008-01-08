@@ -20,6 +20,46 @@ dataViewer.list = list(
   )
 
 
+write.csv.list = list(
+  title = "write.csv()",
+  help = "write.csv",
+  type = "text",                      # either text or graphic
+  assignto = NULL,
+  variableType = NULL,           # uni/bi/model/lattice
+  action = list(
+    beginning = "write.csv(",
+    ending = ")"
+    ),
+  arguments = list(
+    arguments = list(
+      x = list(
+        type = "gedit"
+        ),
+      file = list(
+        type = "gfilebrowse",
+        quote=TRUE
+        ),
+      row.names = list(
+        type = "gdroplist",
+        items = c(FALSE,TRUE)
+        ),
+      col.names = list(
+        type = "gdroplist",
+        items = c(TRUE, FALSE)
+        ),
+      append = list(
+        type = "gdroplist",
+        items = c(FALSE, TRUE)
+        ),
+      quote =  list(
+        type = "gdroplist",
+        items = c(TRUE, FALSE)
+        )
+      )
+    )
+  )
+
+
 ## table and xtabs
 table.list = list(
   title = "table()",

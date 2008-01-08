@@ -72,7 +72,7 @@ pmg.eval(command, assignto=NULL)
 	  global environment.}
 	}
 }
-\value{}
+%%\value{}
 \author{John Verzani}
 \examples{
 \dontrun{

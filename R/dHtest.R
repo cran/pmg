@@ -56,7 +56,9 @@ dTestsDialog = function() {
   dialogList[["FirstOne"]] = glabel("Select a test from popup")
   
   
-  win = pmgWC$new("Dynamic tests",handler = function(h,...) {
+  win = pmgWC$new("Dynamic tests",
+    width=400,height=300,
+    handler = function(h,...) {
     for(i in dialogList) {
       ids = tag(i,"dropHandlers")
       if(!is.null(ids))

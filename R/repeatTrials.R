@@ -6,7 +6,12 @@ pmgRepeatTrials = function(expr, n = 10) {
   ## return n values
   if(!is.expression(expr))
     expr = as.expression(substitute(expr))
-  out = sapply(1:n, function(...) eval(expr, envir=.GlobalEnv))
+  out = try(sapply(1:n, function(...) eval(expr, envir=.GlobalEnv)),silent=TRUE)
+  if(inherits(out,"try-error")) {
+    cat(gettext("Error occurred."))
+    return(NA)
+  }
+    
   if(is.matrix(out))
     return(t(out))
   else
@@ -53,7 +58,11 @@ repeatTrialsGUI = function(container = NULL) {
       cat("Need an expression\n")
       return()
     }
-    theExpression = parse(text = theExpression)
+    theExpression = try(parse(text = theExpression),silent=TRUE)
+    if(inherits(theExpression,"try-error")) {
+      cat(gettext("Error in the expression\n"))
+      return(FALSE)
+    }
     
     n <- svalue(.n)
     if(is.na(n) || (!is.numeric(n) && n < 0)) {

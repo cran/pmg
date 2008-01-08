@@ -9,7 +9,7 @@ pmg.viewDataSets = function(width=400, height=400) {
   
   win = pmgWC$new("Load data set", v=T)
   size(win) <-  c( width, height)
-  group = ggroup(horizontal=FALSE, container=win)
+  group = ggroup(horizontal=FALSE, container=win, expand=TRUE)
 
   
 
