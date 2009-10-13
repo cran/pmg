@@ -57,7 +57,7 @@ pmg.eval(command, assignto=NULL)
 	The functions \code{pmg.add}, \code{pmg.gw}, \code{pmg.addMenubar}, and
 	\code{pmg.eval} are used to extend the GUI.
 
-	\description{
+	\describe{
 	  \item{pmg.add}{This is used to add a widget to the main
 	    notebook containing the dialogs}
 	  \item{pmg.gw}{This is used to add a \code{ggenericwidget}

@@ -1,0 +1,163 @@
+2008-05-02  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/pmg.datamenu.R: issue with unquoted text
+
+        * inst/doc: removed eps files -- large ones
+
+2008-04-24  jverzani  <verzani@csilaptop.Belkin>
+
+	* DESCRIPTION: set LazyLoad: FALSE to avoid proto issue
+
+2008-02-07  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/pmg.viewDataSets.R: widened default size to 50 pixels
+
+2008-02-01  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/dSummaryDialog.R: fixed bug with where mad was placed
+
+2008-01-09  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/dLatticeExplorer.R: in bivariate graphs fixed role of x and
+	y. y is now the first variable dropped (the primary variable is
+	the response variable)
+
+2008-01-07  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/pmg.teachingDemos.R: added try(...) wrappers, added statusbar,
+	fixed default size to be bigger on initial call
+
+	* R/pmg.datamenu.R: added write.csv ggenericwidget dialog
+
+	* R/iw.R: fixed. Internationalized.
+
+2008-01-01  jverzani  <verzani@csilaptop.Belkin>
+
+	* R/pmg.datamanipulation.R: replaced the edit properties dialog
+	with one relying on proto. Much better flow.
+
+2007-10-24  John Verzani  <jverzani@gmail.com>
+
+	* R/BasicWidgets.R: added menubar, toolbar, statusbar to BasicGUI
+
+2007-10-23  John Verzani  <jverzani@gmail.com>
+
+	* R/WindowCollector.R: New proto object to keep track of open
+		  windows. pmgWC$show is called under File:: menu. Whereas
+			  pmgWC$new() is used to generaate new gwindow
+				  objects. 
+
+2007-10-13  John Verzani  <jverzani@gmail.com>
+
+	* R/iw.R: new function pmg.specifyFileForImport for importing
+		  files. Uses proto, BasicWidget to make a wizard
+
+2007-10-10  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.R: fixed lst$variableTypeExtra error
+
+2007-10-09  John Verzani  <jverzani@gmail.com>
+
+	* R/dLatticeExplorer.R: added condition of plot.new. If fails,
+		  don't try to draw plot
+
+	* R/dHtest.R: fixed issue with oneway-test (extra args). Put  in
+		  error message when do.call fails.
+
+2007-08-20  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.modelsmenu.R: fixed type in nlme
+
+2007-08-18  John Verzani  <jverzani@gmail.com>
+
+	* R/quantileWidget.R: made quantiles a droplist with a few options
+
+2007-08-14  John Verzani  <jverzani@gmail.com>
+
+	* R/qplotGUI.R: added new GUI for Hadley's qplot.
+
+	* R/dLatticeExplorer.R: Added options for aspect, type
+
+	* R/pmg.about.R (setCRAN): Added button to check for updates
+
+2007-08-13  John Verzani  <jverzani@gmail.com>
+
+	* R/repeatTrials.R: added this function, as suggested by Daniel Kaplan
+
+2007-07-11  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.R: Rearrange to put command area at bottom of notebooks. 
+
+2007-04-06  John Verzani  <jverzani@gmail.com>
+
+	* R/dpgrFuncs.R: wrote 1 gui for the pdqr functions
+
+2007-04-02  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.iplots.R: added in iplots dialog. Could use a bit of work:
+		  text, ...
+
+2007-03-31  John Verzani  <jverzani@gmail.com>
+
+	* R/YN.R: made so text entries evaluate their values, not just
+		  numeric entries now
+
+	* R/dLatticeExplorer.R: fixed bug with bivariate graphs
+
+2007-03-30  John Verzani  <jverzani@gmail.com>
+
+	* R/dModelsDialog.R: error with response and predictor vars
+		  fixed. Should be able to edit them now.
+
+2007-03-10  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.teachingDemos.R: fixed typo in width
+
+	* R/dHtest.R: minor issue with bivariate and label after firt
+		  value was dropped
+
+2007-03-02  John Verzani  <jverzani@gmail.com>
+
+	* R/pmg.installCRANPackage.R: fixed minor bug, didn't call back to
+		  dialog if choosing a CRAN mirror
+
+2007-02-25  John Verzani  <jverzani@gmail.com>
+
+	* R/reshape.R: Added this set of dialogs
+
+2007-02-14  John Verzani  <jverzani@gmail.com>
+
+	* R/dHtest.R: fixed issue iwth x~f and alternative
+
+2007-02-13  John Verzani  <jverzani@gmail.com>
+
+	* R/dHtest.R: added formulas for the t-test.
+
+2007-02-06  John Verzani  <jverzani@gmail.com>
+
+	* R/misc.R: fixed pmgSummary -- getStockIconFromClass (not
+		  Object). These functions are no longer exported from
+			  gWidgetsRGtk2, but rather live in pmg.
+
+2006-10-20    <verzani@math.csi.cuny.edu>
+
+	* R/pmg.installCRANPackage.R: bug with res[1,4] fixed
+
+2006-09-28    <verzani@math.csi.cuny.edu>
+
+	* R/pmg.R: added pmg.eval() to allow interaction with Commands tab.
+	Added pmg.addMenubar() for adding to menubar. Fixed pmg.gw() for
+	adding to dialog notebook with ggenericwidget
+
+	* R/dLatticeExplorer.R: Put in check so that conditioned plots
+	don't try to draw too many panels
+
+2006-09-26    <verzani@math.csi.cuny.edu>
+
+	* R/quantileWidget.R: Added this function. Goal is to abstract
+	elements to make good widgets for beginning students
+
+	* R/dSummaryDialog.R: Added yVar enabled, fixed bug with uni/bi
+	variate; added a new clear button
+
+

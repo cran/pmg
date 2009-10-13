@@ -1,0 +1,41 @@
+* Need to rework this, but not until we find the time ;(
+-----------------
+* plot.new hook -- see cacher
+* Add in global variable ANS via
+ makeActiveBinding("ans", function() .Last.value, .GlobalEnv) (GG)
+
+* interface issues: lattice clear too much, bold-faced drop areas not
+  obvious; snapshot option for lattice explorer; graph scatter with
+  fit for lm
+* apres ML, write
+  * filebrowser: icons, actions (load, edit, jpg, R, txt, import
+   (csv,...))
+  * command history (what to do with outputs?)
+  * object browser
+  * viewer of verctor, matrix data frame, list (gdf)
+  * context sensitive -- plot of matrix eg. greyscale
+  * cell editor -- ### to delimit cells
+  * better text editor (find word at point; find
+    block(delimiter="^###"); how to highlight block, etc.
+  * see completions code in utils for many useful functions to make
+    the command line better
+
+##################################################
+Next release:
+* add lmer to our thingy. clean up fitmodels
+* bootstrap interface for boot (not bootstrap)
+* proto stuff for ggplot2 -- see that code itself.
+DONE * add dialog to keep track of open windows (proto)
+* put random effects interface for (1|var) etc into editFormulatDialog
+* Add more modeling interfaces: logistic regression, ...
+fixe? glm,etc formula is broken! What library comes with R? lmer?
+glm -- is broken (link needs single quotes)
+dynamic models: add drop1, make popup go to top after selection
+  ISSUE-inf. loop
+* fix windows issues: gedit color, popupbox width
+* lmer interface.
+* add in stuff for manipulating data: did reshape, xtabs? aggregate? ...
+
+DONE * Integrate ggplots as opition
+DONE * iplots menu -- if present
+

@@ -1,0 +1,117 @@
+<h2>P M G</h2>
+
+<P> The package <b>pmg</b> (poor man's GUI) provides a relatively
+simple GUI for the statistical software <A
+href="http://www.r-project.org">R</A>. It is similar to the more
+mature package <A
+href="http://socserv.mcmaster.ca/jfox/Misc/Rcmdr/">RCmdr</A>. The
+primary difference being the use of the GTK toolkit via <A
+href="http://www.ggobi.org/rgtk2">RGtk2</a> package. This toolkit has
+many advantages:
+<UL>
+<LI> It is multi-platform: windows, linux (X11), Mac OS X, 
+<LI> It allows for neat features like drag and drop
+<LI> It isn't tcl (a personal bias)
+</UL>
+
+<P>
+Additionally, the <A href="http://www.ggobi.org/rgtk2">cairoDevice</A>
+package provides a graphics device that can be embedded into gtk
+widgets. This allows pmg to have a notebook interface for storing
+multiple graphics under X11.
+
+<P>
+Kudos to Michael Lawrence for his efforts in porting RGtk to the newer
+version of the gtk libraries
+
+
+<P>
+<A HREF="http://wiener.math.csi.cuny.edu/pmg/pmg.screenshot.jpg">
+<IMG SRC="http://wiener.math.csi.cuny.edu/pmg/pmg.screenshot.jpg" width=500>
+(click to enlarge)</A>
+
+
+
+<h3> iWidgetsRGtk</h3>
+<P>
+
+The pmg package relies on the <A
+href="http://www.math.csi.cuny.edu/pmg">iWidgetsRGtk</A> package. This
+provides an interface between R and RGtk2 which simplifies working
+with the RGtk2 functions. The style is taken from the iwidgets API by
+Simon Urbanek which has the promise of being cross-toolkit. The API
+was extended to make pmg, but any program written using Simon's API
+should work with this package. It is anticipated that iWidgetsRGtk
+will be as useful as a standalone package as pmg is as a work environment.
+
+
+<h3> Installation</h3>
+
+<P>Installation of  pmg varies from system to system. The difficulty,
+if these is any, is in installation of the RGtk2 and cairoDevice
+packages, and these in turn are only difficult if the necessary gtk
+libraries are not installed and at version 2.8.0 or higher.
+
+
+<h4> Installation of gtk libraries</h4>
+<P>
+This varies from system to system. The key requirement is that version
+2.8.0 or newer be installed.
+
+<UL>
+<LI> For Windows: The <A href="http://www.ggobi.org/rgtk2">RGTk2</A>
+website has isntructions for this that direct you to <A
+href="http://gladewin32.sourceforge.net"</A> to download the automatic
+installer for the GTK runtime. 
+
+
+<LI> For Mac OS X: The newest version of gtk (a beta version 2.9.0)
+has native support for gtk. I can not verify if this is supported by
+RGtk2. However, pmg was developed using gtk under X11 on Mac OS X
+(10.3). These libraries were installed from source, in a somewhat
+tedious process. It does not appear that fink installs the needed
+version 2.8.0 or higher
+
+
+<LI> For linux: older versions may need to have their GTK libraries
+updated to atleast 2.8.0. It appears that this is not necessary for Fedora
+5, Ubuntu, gentoo, and debian testing.
+
+</UL>
+
+<h4> Installing RGt2 and cairoDevice</h4>
+<P>
+For Windows there are binary packages availabe at the <A
+href="http://www.ggobi.org/rgtk2">RGTk2</A> website. Under linux or mac
+OS X a source package is available at the same website. This is
+installed like any other source package. For example, download the
+package and then run a command like 
+<PRE>
+> install.packages("RGtk2_2.8.3.tar.gz", repos=NULL)
+</PRE>
+
+
+<h4> Installing pmg </h4>
+<P>
+I've  set up a package repository. 
+Installation is supposed to be as easy as
+<PRE>
+> install.packages("iWidgetsRGtk",repos="http://www.math.csi.cuny.edu/pmg")
+> install.packages("pmg",repos="http://www.math.csi.cuny.edu/pmg")
+</PRE>
+<P>
+If this fails, look on the left side of the page at either in <A href="http://www.math.csi.cuny.edu/pmg/src/contrib">source</A> (for source) or
+<A href="http://wiener.math.csi.cuny.edu/pmg/bin/windows/contrib">win.binary</A> for a windows binary and download the most current package.
+
+I've made a source package for linux and mac, and a windows binary for
+windows. There is no compilation required, as both packages are coded
+solely in R.
+
+Both packages come with a package vignette. In the case of
+iWidgetsRGtk it is quite lengthy.
+
+<h4>Alpha software</h4>
+<P>
+This package is being developed and changed. There are many bugs, some
+maybe glaring. As well, new features have recently been added. Any
+comments or suggestions are most welcome. You may email at <A href="mailto://pmg@gmail.com">pmg@gmail.com</A>.

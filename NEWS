@@ -1,7 +1,12 @@
 Dear Emacs, please make this -*-Text-*- mode!
 
 NEWS for pmg
-Changes for 0.9-37
+Changes for 0.9-40
+------------------------
+
+* man page fix to get rid of warning
+
+Changes for 0.9-38
 ------------------------
 
 * different numbering to address mixed-up upload to CRAN.
