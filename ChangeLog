@@ -1,3 +1,10 @@
+2009-12-09  john verzani  <verzani@john-verzanis-macbook-pro.local>
+
+	* fix to vignette
+
+	* R/pmg.loadPackages.R: fix to listing fpackages function
+	
+
 2008-05-02  jverzani  <verzani@csilaptop.Belkin>
 
 	* R/pmg.datamenu.R: issue with unquoted text

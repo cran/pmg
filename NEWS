@@ -1,6 +1,10 @@
 Dear Emacs, please make this -*-Text-*- mode!
 
 NEWS for pmg
+Changes for 0.9-41
+------------------------
+* fix to vignette to pass R CMD check as of new TexLive version
+
 Changes for 0.9-40
 ------------------------
 

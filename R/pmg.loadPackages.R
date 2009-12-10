@@ -1,12 +1,7 @@
 getPackages = function(...) {
   allPackages = .packages(all.available=TRUE)
   loaded = allPackages %in% .packages()
-  ret = cbind(allPackages,loaded)
-  colnames(ret) = c("Package","loaded")
-  ret = as.data.frame(ret)
-  ret[,1] = as.character(ret[,1])
-  ret[,2] = as.logical(ret[,2])
-  return(ret)
+  data.frame(Package=allPackages, loaded=loaded, stringsAsFactors=FALSE)
 }
 
 

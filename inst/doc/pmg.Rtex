@@ -6,7 +6,7 @@
 \usepackage[]{geometry}
 \usepackage{mathptm}            % for math fonts type 1
 \usepackage{graphicx}           % for graphics files
-\usepackage{floatflt}           % for ``floating boxes''
+%%\usepackage{floatflt}           % for ``floating boxes''
 %%\usepackage{index}
 \usepackage{relsize}            % for relative size fonts
 \usepackage{amsmath}            % for amslatex stuff
