@@ -1,3 +1,9 @@
+2010-03-08  john verzani  <verzani@john-verzanis-macbook-pro.local>
+
+	* fix to bivariate case and initial drop
+
+	* R/dHtest.R: error with font<- and using list -- use c() now
+
 2009-12-09  john verzani  <verzani@john-verzanis-macbook-pro.local>
 
 	* fix to vignette

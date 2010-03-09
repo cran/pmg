@@ -23,18 +23,18 @@ dSummaryDialog = function(container=NULL) {
 
   
   xVar = glabel(defaultMsg,editable=TRUE)
-  font(xVar) <- list(style="bold")
+  font(xVar) <- c(style="bold")
   tag(obj,"xVarData") <- NULL
   tbl[1,2] = xVar
 
   yVar = glabel(defaultMsg,editable=TRUE)
-  font(yVar) <- list(style="bold")
+  font(yVar) <- c(style="bold")
   enabled(yVar)<-FALSE                  # initially not enabled
   tag(obj,"yVarData") <- NULL
   tbl[2,2] = yVar
 
   groupingVar = glabel(defaultMsg,editable=TRUE)
-  font(groupingVar) <- list(style="bold")
+  font(groupingVar) <- c(style="bold")
   tag(obj,"groupingVarData") <- NULL
   tbl[3,2] = groupingVar
 

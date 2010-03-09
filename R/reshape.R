@@ -189,9 +189,9 @@ pmg.castGUI = function(container=pmgWC$new("Cast data")) {
   defColFormText = "Drop column variable(s) here"
   defRowFormText = "Drop row variable(s) here"
   colFormula = glabel(defColFormText, editable=TRUE)
-  font(colFormula) <- list(style="bold")
+  font(colFormula) <- c(style="bold")
   rowFormula = glabel(defRowFormText, editable=TRUE)
-  font(rowFormula) <- list(style="bold")  
+  font(rowFormula) <- c(style="bold")  
 
   aggregateFuns = c("length","mean","median","IQR","sd","range","summary")
   theAggregateFun = gdroplist(aggregateFuns, editable=TRUE)

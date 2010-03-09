@@ -198,7 +198,7 @@ dynamicModelWidget = function(
   formulaGroup = ggroup(container=group)
   ## key widgets:
   responseVar = glabel("response", container=formulaGroup,editable=TRUE)
-  font(responseVar) <-  list(style="bold")
+  font(responseVar) <-  c(style="bold")
   tag(obj$ref,"responseVar") <- responseVar
   tag(obj$ref, "responseVarData") <- NA
 
@@ -208,7 +208,7 @@ dynamicModelWidget = function(
   tag(obj$ref,"intercept") <- intercept
 
   predictorVars = glabel("predictor(s)",container=formulaGroup, editable=TRUE)
-  font(predictorVars) <- list(style="bold")
+  font(predictorVars) <- c(style="bold")
   tag(obj$ref,"predictorVars") <- predictorVars
   tag(obj$ref,"predictorVarsData") <- list()
 
