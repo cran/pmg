@@ -626,7 +626,8 @@ dHtest = function(x, type=NULL, digits = 4, container = NULL, ...) {
     rownames(aDF) = c("sample 1","sample 2")
     if(type == "x.and.n")
       aDF=aDF[1,]
-    object.list[["data.name"]] = gdf(aDF)
+    object.list[["data.name"]] <- tmp <- gdf(aDF)
+    size(tmp) <- c(150, 75)
     addhandlerchanged(object.list[["data.name"]],handler=function(h,...) {
       updatedHtest(obj)
     })

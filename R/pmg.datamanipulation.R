@@ -94,12 +94,12 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
 
   ## need means to select the data frame, popup this for editing
 
-  g = ggroup(horizontal=FALSE, cont=container)
+  g = ggroup(horizontal=FALSE, container=container)
 
   add(g, glabel("This dialog allows you to change the\n name, and data type for the columns of a data frame."))
   add(g, gseparator())
   
-  tbl = glayout(cont=g)
+  tbl = glayout(container=g)
 
   allDFs = lsType("data.frame")
   selHandler = function(h,...) {
@@ -141,38 +141,38 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
   dlg$dfname <- dfname
   dlg$df <- df                          # make a copy
   
-  dlg$colTypes = function(.) sapply(.$df,getType)
+  dlg$colTypes = function(.) sapply(.$df,function(i) i$getType)
 
   
   ## Display dialog
   dlg$makeBody = function(., container) {
-    g <- ggroup(horizontal=FALSE, cont=container, expand=TRUE)
-    glabel(gettext("Edit names and column types"),cont=g)
-    tbl <- glayout(cont=g, expand=TRUE)
+    g <- ggroup(horizontal=FALSE, container=container, expand=TRUE)
+    glabel(gettext("Edit names and column types"),container=g)
+    tbl <- glayout(container=g, expand=TRUE)
 
     tbl[1,1] <- "Which column:"         # no ?, : ala apple
-    tbl[1,2] <- (.$columnDroplistGroup <- ggroup(cont=tbl))
-    .$columnDroplist <- gdroplist(names(.$df), cont=.$columnDroplistGroup)
+    tbl[1,2] <- (.$columnDroplistGroup <- ggroup(container=tbl))
+    .$columnDroplist <- gdroplist(names(.$df), container=.$columnDroplistGroup)
     
     tbl[2,1] <- "Column type:"
-    tbl[2,2] <- (.$columnTypeDroplist <- gdroplist(.$allTypes, cont=tbl))
+    tbl[2,2] <- (.$columnTypeDroplist <- gdroplist(.$allTypes, container=tbl))
     svalue(.$columnTypeDroplist) <- .$getType(.$df[,1]) ## initialize
 
     tbl[3,1] <- "Column name:"
-    tbl[3,2] <- (.$columnNameDroplist <- gedit(names(.$df)[1], cont=tbl))
+    tbl[3,2] <- (.$columnNameDroplist <- gedit(names(.$df)[1], container=tbl))
 
     visible(tbl) <- TRUE
 
-    gseparator(cont=g)
+    gseparator(container=g)
 
     ## Show the current data frame
-    .$dfGroup = ggroup(cont=g, expand=TRUE)
-    .$dfShow = gdf(head(.$df), cont=.$dfGroup,expand=TRUE)
+    .$dfGroup = ggroup(container=g, expand=TRUE)
+    .$dfShow = gdf(head(.$df), container=.$dfGroup,expand=TRUE)
 #    enabled(.$dfShow) <- FALSE
     
-    bg <- ggroup(cont=g)
-    glabel("Save data frame as", cont=bg)
-    .$saveName <- gedit(.$dfname, cont=bg)
+    bg <- ggroup(container=g)
+    glabel("Save data frame as", container=bg)
+    .$saveName <- gedit(.$dfname, container=bg)
 
     ## helper
     getIndex = function(.) {
@@ -219,7 +219,7 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
     ## replace data frame in disply
     updateDF = function(.) {
       delete(.$dfGroup, .$dfShow)
-      .$dfShow = gdf(head(.$df), cont=.$dfGroup, expand=TRUE)
+      .$dfShow = gdf(head(.$df), container=.$dfGroup, expand=TRUE)
 #      enabled(.$dfShow) <- FALSE
     }
 
@@ -252,7 +252,7 @@ pmg.edit.dataframe.properties.dialog = function(container=NULL) {
       }
     }
     ## write
-    assign(outputName, df, envir=.GlobalEnv)
+    assign_global(outputName, df)
     ## close up
     dispose(.$window)
   }

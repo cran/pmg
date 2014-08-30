@@ -128,22 +128,22 @@ dLatticeExplorer = function(
   tag(obj,"PanelChooser") <-  PanelChooser
 
 
-  glabel("aspect=", cont=latticeOptionsGroup)
+  glabel("aspect=", container=latticeOptionsGroup)
   aspectChooser = gdroplist(c("fill","xy","iso"), editable=TRUE,
-    cont=latticeOptionsGroup,
+    container=latticeOptionsGroup,
     handler = function(...) updatedLatticeExplorer(obj))
 
-  gseparator(horizontal=FALSE,cont=latticeOptionsGroup)
-  glabel("type=", cont=latticeOptionsGroup)
+  gseparator(horizontal=FALSE,container=latticeOptionsGroup)
+  glabel("type=", container=latticeOptionsGroup)
   typeChooser = gcheckboxgroup(c('p','l','a','o'),
     horizontal=TRUE,
-    cont=latticeOptionsGroup,
+    container=latticeOptionsGroup,
     handler = function(...) updatedLatticeExplorer(obj))
 
-  gseparator(horizontal=FALSE,cont=latticeOptionsGroup)
-  glabel("col=",cont=latticeOptionsGroup)
+  gseparator(horizontal=FALSE,container=latticeOptionsGroup)
+  glabel("col=",container=latticeOptionsGroup)
   colChooser = gdroplist(c("","black","red","blue","green","brown","yellow"),
-    cont = latticeOptionsGroup,
+    container = latticeOptionsGroup,
     handler = function(...) updatedLatticeExplorer(obj))
 
   tag(obj,"aspectChooser") <- aspectChooser
@@ -185,7 +185,6 @@ as.dLatticeExplorer = function(da,...) {
 ## Main workhorse
 updatedLatticeExplorer = function(object,...) {
   obj = object                          # for s3 consistency
-  require(lattice)
 
   
   vars = tag(obj,"varlist")

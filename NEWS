@@ -1,6 +1,15 @@
 Dear Emacs, please make this -*-Text-*- mode!
 
 NEWS for pmg
+Changes for 0.9-43
+------------------------
+
+* fixed vignette location
+
+* fixed issues with some dialogs (changes made to gWidgets too)
+
+* removed iplots, ggplot, help features
+
 Changes for 0.9-42
 ------------------------
 

@@ -252,21 +252,6 @@ pmg.menu$Plots$"Add to graphic"$"title"$handler =
   function(h,...) pmg.gw(add.title.list)
 
 
-## iplots conditionally
-if("iplots" %in% .packages(TRUE)) {
-  pmg.menu$Plots$"iplots"$handler = function(...) {
-    pmg.iplots()
-  }
-}
-
-## Add back in, bu this is causing crashes!
-## ## qqplot2 conditionally
-## if("ggplot2" %in% .packages(TRUE)) {
-##   pmg.menu$Plots$"qplot"$handler = function(...) {
-##     qplotGUI(container=pmg.dialog.notebook, label = "qplot()")
-##   }
-## }
-
 pmg.menu$Plots$"Teaching demos"$handler =
   function(h,...) pmg.teachingDemos()
 ###
@@ -368,15 +353,15 @@ help.menu$Help$"About PMG"$handler =
   function(h,...) add(pmg.dialog.notebook,pmg.about(),label = "About P M G")
 ##pmg.about(container=pmgWC$new(v=TRUE))
 help.menu$Help$"About PMG"$icon="about"
-help.menu$Help$"R helpbrowser"$handler =
-  function(h,...) {
-    if(is.null(pmg.helpBrowser.window) ||
-       is.invalid(pmg.helpBrowser.window)) {
-      assignInNamespace("pmg.helpBrowser.window", ghelpbrowser(),"pmg")
-    } else {
-      focus(pmg.helpBrowser.window) <- TRUE # will this work
-    }
-  }
+## help.menu$Help$"R helpbrowser"$handler =
+##   function(h,...) {
+##     if(is.null(pmg.helpBrowser.window) ||
+##        is.invalid(pmg.helpBrowser.window)) {
+##       assignInNamespace("pmg.helpBrowser.window", ghelpbrowser(),"pmg")
+##     } else {
+##       focus(pmg.helpBrowser.window) <- TRUE # will this work
+##     }
+##   }
 help.menu$Help$"R Site Search"$handler = function(h,...) RSiteSearch.Dialog()
 help.menu$Help$"View vignettes"$handler = function(h,...) viewVignettes.Dialog()
 help.menu$Help$"View demos"$handler = function(h,...) viewDemos.Dialog()

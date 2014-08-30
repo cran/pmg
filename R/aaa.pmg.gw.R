@@ -1,4 +1,3 @@
-require(proto)
 ## stuff to make generic widgets
 
 
@@ -63,3 +62,9 @@ labels.list = list(
     ylab = EMPTY.list
   )
 
+
+## trick to assign in global env. Not idea!!!
+assign_global <- function(nm, obj) {
+    envir <- eval(parse(text=".GlobalEnv"))
+    assign(nm, obj, envir=envir)
+}

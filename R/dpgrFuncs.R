@@ -69,7 +69,7 @@ dpqrfuncs = function(type=c("p","d","q","r"), container=NULL) {
   
   saveAs = gedit("")
 
-  output = gtext("", font.attr=c("monospace"))
+  output = gtext("", font.attr=c(style="monospace"))
 
   ## layout
   tbl = glayout(container=gp)
@@ -95,11 +95,11 @@ dpqrfuncs = function(type=c("p","d","q","r"), container=NULL) {
   tbl[i,1] = glabel("Save output as:")
   tbl[i,2] = saveAs
 
-  bgp = ggroup(cont=gp)
+  bgp = ggroup(container=gp)
   tbl[i+1,2] <- bgp
   addSpring(bgp)
-  findSample = gbutton("ok",cont=bgp)
-  helpButton = gbutton("help", cont=bgp)
+  findSample = gbutton("ok",container=bgp)
+  helpButton = gbutton("help", container=bgp)
 
   visible(tbl) <- TRUE
 

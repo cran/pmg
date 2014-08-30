@@ -15,7 +15,7 @@ pmg.chooseCRANmirror = function(widget = NULL, doing.first=FALSE,...) {
   size(window) <- c(500,400)
   group = ggroup(horizontal=FALSE, container = window)
 
-  tbl = gtable(utils:::getCRANmirrors(), chosencol=4, 
+  tbl = gtable(utils::getCRANmirrors(), chosencol=4, 
     filter.column=2,
     handler = function(h,...) {
       URL = svalue(tbl)

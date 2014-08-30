@@ -10,7 +10,8 @@ dModelsDialog = function() {
     )
 
   ## main groups
-  win = pmgWC$new("Models",v=T)
+  win = pmgWC$new("Models",visible=TRUE)
+  size(win) <- c(600, 400)
   gp = ggroup(horizontal=FALSE, container=win, raise.on.dragmotion = TRUE)
   popupGroup = ggroup(container=gp)
   addSpring(popupGroup)
@@ -114,7 +115,6 @@ gui.lm = function(container=NULL) {
 }
 
 gui.rlm = function(container=NULL) {
-  require(MASS)
   ## actions inherit from lm. -- sublcass?
   actions =list(
     "plot: Residuals vs Fitted" =list(
@@ -368,7 +368,7 @@ dynamicModelWidget = function(
         varName = svalue(theName)
         if(!is.empty(varName)) {
           varName = make.names(varName)
-          assign(varName, tag(obj$ref,"res"), envir=.GlobalEnv)
+          assign_global(varName, tag(obj$ref,"res"))
           dispose(win)
         }
       }
@@ -471,9 +471,9 @@ update.gDynamicModel = function(object, ...) {
   dispose(outputArea)
   for(i in out) {
     if(length(grep(":$",i)) > 0)
-      add(outputArea,i,font.attr=c("monospace","blue"))
+      add(outputArea,i,font.attr=c(style="monospace",color="blue"))
     else
-      add(outputArea,i,font.attr=c("monospace"))
+      add(outputArea,i,font.attr=c(style="monospace"))
   }
 }
 

@@ -98,7 +98,7 @@ pmg.closeAll = function() {
 
 ##################################################
 ## call with "console" to use console, defaults to GUI
-pmg = function(cliType="console", width=850, height=.75*width,
+pmg = function(cliType="console", width=1000, height=.75*width,
   guiToolkit="RGtk2") {                 # getOption("guiToolkit")
   if(!interactive()) {
     cat("PMG requires an interactive environment\n")
@@ -111,14 +111,6 @@ pmg = function(cliType="console", width=850, height=.75*width,
   mainHeight = height*.8                # height without menu, tool bars
 
   ### which toolkit to load. If there is a gWidgets, then do that, else try pmggWidgetsRGtk
-  if(!require(gWidgets)) {
-    cat("PMG currently needs gWidgets and gWidgetsRGtk2\n");
-    return()
-  }
-  if(!require(gWidgetsRGtk2)) {
-   cat("PMG needs gWidgets and gWidgetsRGtk2\n");
-    return()
-  } 
   if(guiToolkit != "RGtk2") {
     cat("pmg uses gWidgets and gWidgetsRGtk2, overriding choice of toolkit\n")
   }
@@ -157,12 +149,13 @@ pmg = function(cliType="console", width=850, height=.75*width,
   add(mainGroup, pmg.menuBar)
   ## optional menu for user The user menu is a named list, the
   ## top-level names yield the name across the menubar
-  if(exists("pmg.user.menu")) {
-    for(i in names(pmg.user.menu)) {
-      userMenu = gmenu(pmg.user.menu[[i]], name=i)
-      add(pmg.menubar, userMenu)
-    }
-  }
+  ## if(exists("pmg.user.menu")) {
+  ##     pmg.user.menu <- get("pmg.user.menu")
+  ##     for(i in names(pmg.user.menu)) {
+  ##         userMenu = gmenu(pmg.user.menu[[i]], name=i)
+  ##         add(pmg.menubar, userMenu)
+  ##     }
+  ## }
 
   helpMenu = gmenu(help.menu, name="Help")
   add(pmg.menuBar, helpMenu)
@@ -219,7 +212,6 @@ pmg = function(cliType="console", width=850, height=.75*width,
 
   ## plot notebook
   ### XXX This is an issue: cairoDevice needs to be 
-##  if(guiToolkit == "RGtk2" && require(cairoDevice)) {
     toolbar$plotnotebook$handler = function(h,...) {
       if(is.null(pmg.plotnotebook.window) ||
          !is.gWindow(pmg.plotnotebook.window) ||
@@ -242,16 +234,16 @@ pmg = function(cliType="console", width=850, height=.75*width,
 ##   toolbar$print$icon = "print"
 
   ## help
-  toolbar$help$handler = function(h,...) {
-    if(class(pmg.helpBrowser.window) != "pmgHelpBrowser")  {
-##      pmg.helpBrowser.window <<- ghelpbrowser()
-      assignInNamespace("pmg.helpBrowser.window", ghelpbrowser(),"pmg")
-    } else {
-      ## raise window pmg.helpBrowser.window
-      focus(pmg.helpBrowser.window) <- TRUE
-    }
-  }
-  toolbar$help$icon = "help"
+##   toolbar$help$handler = function(h,...) {
+##     if(class(pmg.helpBrowser.window) != "pmgHelpBrowser")  {
+## ##      pmg.helpBrowser.window <<- ghelpbrowser()
+##       assignInNamespace("pmg.helpBrowser.window", ghelpbrowser(),"pmg")
+##     } else {
+##       ## raise window pmg.helpBrowser.window
+##       focus(pmg.helpBrowser.window) <- TRUE
+##     }
+##   }
+##   toolbar$help$icon = "help"
   
   ## make the toolbar
   tmp = gtoolbar(toolbar)

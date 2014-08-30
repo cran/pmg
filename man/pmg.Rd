@@ -13,7 +13,7 @@
 
 }
 \usage{
-pmg(cliType="console",  width=850, height=.75*width,guiToolkit="RGtk2")
+pmg(cliType="console",  width=1000, height=.75*width,guiToolkit="RGtk2")
 
 pmg.add(widget,label)
 

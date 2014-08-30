@@ -109,7 +109,7 @@ viewDemos.Dialog = function() {
 ##################################################
 ## helper furntions
 ## list all packages
-getAllPackages = function() .packages(all=TRUE)
+getAllPackages = function() .packages(all.available=TRUE)
 
 #
 getAllVignettes = function() {

@@ -61,24 +61,24 @@ pmg.specifyFileForImport = function(...) {
   GUI$useDefaultText = gettext("<use file extension to determine>")
   GUI$fileSelectDefaultText = gettext("Specify a file or url...")
   GUI$makeBody = function(., container) {
-    g = ggroup(horizontal=FALSE, cont=container)
-    tbl = glayout(cont=g)
+    g = ggroup(horizontal=FALSE, container=container)
+    tbl = glayout(container=g)
     tbl[1,1] <- "local file"
     tbl[1,2] <- (.$filebrowse = gfilebrowse(text=.$fileSelectDefaultText,
                    action=invisible,
                    container=tbl, filter=.$filterList, quote=FALSE))
-    tbl[2,1] <- (l <- glabel(gettext("or"),cont=tbl))
+    tbl[2,1] <- (l <- glabel(gettext("or"),container=tbl))
     font(l) <- c(style="italic")
-    tbl[2,2] <- gseparator(cont=tbl)
+    tbl[2,2] <- gseparator(container=tbl)
     tbl[3,1] <- "url"
     tbl[3,2] <- (.$url = gedit("", container=tbl))
 
-    tbl[4,1:2] <- gseparator(cont=tbl)
+    tbl[4,1:2] <- gseparator(container=tbl)
     tbl[5,1] = gettext("File type is")
     tbl[5,2] <- (.$filetype = gdroplist(c(
       .$useDefaultText,
       sapply(names(filterList),popchar)
-      ), cont=tbl))
+      ), container=tbl))
 
     visible(tbl) <- TRUE
   }
@@ -161,7 +161,7 @@ importFile = function(filename, ext=NULL) {
         if(override == FALSE)
           return(TRUE)
       }
-      assign(make.names(varName),out,envir=.GlobalEnv)
+      assign_global(make.names(varName),out)
       dispose(.$window) ## clean up
     }
   }
@@ -181,16 +181,16 @@ importFile = function(filename, ext=NULL) {
            "dbf"= .$read_foreign(type="dbf"),
            "DIF" = .$read_DIF(),
            "dta"= .$read_foreign(type="dta"),
-           "epi"= .$read_foreign(type="epi"),
+#           "epi"= .$read_foreign(type="epi"),
            "mtp"= .$read_foreign(type="mtp"),
            "octave"= .$read_foreign(type="octave"),
            "sav"= .$read_foreign(type="spss"),
            "ssd"= .$read_foreign(type="ssd"),
            "xport"= .$read_foreign(type="xport"),
            "systat"= .$read_foreign(type="systat"),
-           "xls"= .$read_spreadsheet(type="xls"),
-           "odt" = .$read_spreadsheet(type="odt"),
-           "gnumeric" = .$read_spreadsheet(type="gnumeric"),
+#           "xls"= .$read_spreadsheet(type="xls"),
+#           "odt" = .$read_spreadsheet(type="odt"),
+#           "gnumeric" = .$read_spreadsheet(type="gnumeric"),
            .$read_text(sep=""))         # default
   }
   ## each of these has FUN="string", args=list(), varName
@@ -204,43 +204,43 @@ importFile = function(filename, ext=NULL) {
     
     ## see ?read.table for numerous arguments
 
-    g = ggroup(horizontal=FALSE, cont=.$container)
-    glabel(sprintf("Read %s",basename(.$filename)), cont=g)
+    g = ggroup(horizontal=FALSE, container=.$container)
+    glabel(sprintf("Read %s",basename(.$filename)), container=g)
 
-    tbl <- glayout(cont=g)
+    tbl <- glayout(container=g)
     tbl[1,1] <- .$AssignToText
-    tbl[1,2] <- (.$varName <- gedit("X", cont=tbl))
+    tbl[1,2] <- (.$varName <- gedit("X", container=tbl))
     .$varName[] <- ls(envir=.GlobalEnv)
     visible(tbl) <- TRUE
 
          
-    f= gframe(gettext("Import"), cont=g)
-    tbl <- glayout(cont=f)
+    f= gframe(gettext("Import"), container=g)
+    tbl <- glayout(container=f)
     tbl[1,1] <- gettext("header")
-    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(TRUE,FALSE), cont=tbl))
+    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(TRUE,FALSE), container=tbl))
     tbl[1,3] <- gettext("Skip lines")
-    tbl[1,4] <- (.$args[["skip"]] <- gspinbutton(0,1000, cont=tbl))
+    tbl[1,4] <- (.$args[["skip"]] <- gspinbutton(0,1000, container=tbl))
     tbl[2,1] <- gettext("Strip whitespace")
-    tbl[2,2] <- (.$args[['strip.white']] <- gdroplist(c(TRUE,FALSE), cont=tbl))
+    tbl[2,2] <- (.$args[['strip.white']] <- gdroplist(c(TRUE,FALSE), container=tbl))
     tbl[2,3] <- gettext("Skip blank lines")
-    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), cont=tbl))
+    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), container=tbl))
 
     visible(tbl) <- TRUE
-    f = gframe(gettext("Attributes"), cont=g)
-    tbl <- glayout(cont=f)
+    f = gframe(gettext("Attributes"), container=g)
+    tbl <- glayout(container=f)
     tbl[1,1] <- gettext("Separator")
-    tbl[1,2] <- (.$args[['sep']] <- gedit(sep, cont=tbl))
-#    tbl[1,2] <- (.$args[['sep']] <- gdroplist(.$allSeps, editable=TRUE,cont=tbl))
+    tbl[1,2] <- (.$args[['sep']] <- gedit(sep, container=tbl))
+#    tbl[1,2] <- (.$args[['sep']] <- gdroplist(.$allSeps, editable=TRUE,container=tbl))
 #    svalue(.$args[['sep']]) <- sep
     
     tbl[1,3] <- gettext("quote")
-    tbl[1,4] <- (.$args[['quote']] <- gedit("\"", cont=tbl))
+    tbl[1,4] <- (.$args[['quote']] <- gedit("\"", container=tbl))
     tbl[2,1] <- gettext("Decimal point")
-    tbl[2,2] <- (.$args[["dec"]] <- gdroplist(c(".",","), cont=tbl))
+    tbl[2,2] <- (.$args[["dec"]] <- gdroplist(c(".",","), container=tbl))
     tbl[2,3] <- gettext("Comment char.")
-    tbl[2,4] <- (.$args[['comment.char']] <- gedit("#", cont=tbl))
+    tbl[2,4] <- (.$args[['comment.char']] <- gedit("#", container=tbl))
     tbl[3,1] <- gettext("NA string")
-    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", cont=tbl))
+    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", container=tbl))
 
     visible(tbl) <- TRUE
 
@@ -253,8 +253,8 @@ importFile = function(filename, ext=NULL) {
       print(df)
       if(!inherits(df,"try-error")) {
         delete(.$og,.$ig)
-        .$ig <- ggroup(horizontal=FALSE, cont=.$og, expand=TRUE)
-        tmp <- gdf(df,cont=.$ig) ## get rownames
+        .$ig <- ggroup(horizontal=FALSE, container=.$og, expand=TRUE)
+        tmp <- gdf(df,container=.$ig) ## get rownames
 ##         enabled(tmp) <- FALSE ## too faint
       } else {
         cat(gettext("Error occured:"))
@@ -263,9 +263,9 @@ importFile = function(filename, ext=NULL) {
     }
 
     ## do names?
-    f = gframe(gettext("preview"), cont=g, expand=TRUE)
-    .$og = ggroup(cont=f, expand=TRUE)
-    .$ig = ggroup(cont=.$og, expand=TRUE)                # to be deleted
+    f = gframe(gettext("preview"), container=g, expand=TRUE)
+    .$og = ggroup(container=f, expand=TRUE)
+    .$ig = ggroup(container=.$og, expand=TRUE)                # to be deleted
     makePreview()
 
     ## now add handler
@@ -275,46 +275,46 @@ importFile = function(filename, ext=NULL) {
     .$FUN = "read.fwf"
     .$args = list(file = gedit(.$filename))
 
-    g = ggroup(horizontal=FALSE, cont=.$container)
-    glabel(paste(gettext("Read"),basename(.$filename),collapse=" "), cont=g)
+    g = ggroup(horizontal=FALSE, container=.$container)
+    glabel(paste(gettext("Read"),basename(.$filename),collapse=" "), container=g)
 
-    tbl <- glayout(cont=g)
+    tbl <- glayout(container=g)
     tbl[1,1] <- .$AssignToText
-    tbl[1,2] <- (.$varName <- gedit("X", cont=tbl))
+    tbl[1,2] <- (.$varName <- gedit("X", container=tbl))
     .$varName[] <- ls(envir=.GlobalEnv)
     visible(tbl) <- TRUE
 
          
-    f= gframe(gettext("Import"), cont=g)
-    tbl <- glayout(cont=f)
+    f= gframe(gettext("Import"), container=g)
+    tbl <- glayout(container=f)
     tbl[1,1] <- gettext("Header")
-    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(FALSE,TRUE), cont=tbl))
+    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(FALSE,TRUE), container=tbl))
     tbl[1,3] <- gettext("Separator")
-    tbl[1,4] <- (.$args[['sep']] <- gedit(sep, cont=tbl))
+    tbl[1,4] <- (.$args[['sep']] <- gedit(sep, container=tbl))
     tbl[2,1] <- gettext("Skip lines")
-    tbl[2,2] <- (.$args[["skip"]] <- gspinbutton(0,1000, cont=tbl))
+    tbl[2,2] <- (.$args[["skip"]] <- gspinbutton(0,1000, container=tbl))
     tbl[2,3] <- gettext("Skip blank lines")
-    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), cont=tbl))
+    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), container=tbl))
     visible(tbl) <- TRUE
-    f = gframe(gettext("Attributes"), cont=g)
-    tbl <- glayout(cont=f)
+    f = gframe(gettext("Attributes"), container=g)
+    tbl <- glayout(container=f)
 #    tbl[1,3] <- "quote"
-#    tbl[1,4] <- (.$args[['quote']] <- gedit("\"", cont=tbl))
+#    tbl[1,4] <- (.$args[['quote']] <- gedit("\"", container=tbl))
 #    tbl[2,1] <- "Decimal point"
-#    tbl[2,2] <- (.$args[["dec"]] <- gdroplist(c(".",","), cont=tbl))
+#    tbl[2,2] <- (.$args[["dec"]] <- gdroplist(c(".",","), container=tbl))
     tbl[1,1] <- gettext("Comment char.")
-    tbl[1,2] <- (.$args[['comment.char']] <- gedit("#", cont=tbl))
+    tbl[1,2] <- (.$args[['comment.char']] <- gedit("#", container=tbl))
 #    tbl[3,1] <- "NA string"
-#    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", cont=tbl))
+#    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", container=tbl))
 
     visible(tbl) <- TRUE
 
     ## widths is key here
 
-    f = gframe(gettext("Field widths"), cont=g)
-    tbl <- glayout(cont=f)
+    f = gframe(gettext("Field widths"), container=g)
+    tbl <- glayout(container=f)
     tbl[1,1] <- gettext("widths")
-    tbl[1,2] <- (.$args[["widths"]] <- gedit(paste("c(",nchar(readLines(.$filename,n=1)),")",collapse=""), coerce.with=svalue,cont=tbl))
+    tbl[1,2] <- (.$args[["widths"]] <- gedit(paste("c(",nchar(readLines(.$filename,n=1)),")",collapse=""), coerce.with=svalue,container=tbl))
     visible(tbl) <- TRUE
 
 
@@ -325,8 +325,8 @@ importFile = function(filename, ext=NULL) {
       df= try(do.call(.$FUN,l), silent=TRUE)
       if(!inherits(df,"try-error")) {
         delete(.$og,.$ig)
-        .$ig <- ggroup(horizontal=FALSE, cont=.$og, expand=TRUE)
-        tmp <- gdf(df,cont=.$ig) ## get rownames
+        .$ig <- ggroup(horizontal=FALSE, container=.$og, expand=TRUE)
+        tmp <- gdf(df,container=.$ig) ## get rownames
 ##         enabled(tmp) <- FALSE ## too faint
       } else {
         cat(gettext("Error:"),df,"\n")
@@ -334,9 +334,9 @@ importFile = function(filename, ext=NULL) {
     }
 
     ## do names?
-    f = gframe(gettext("preview"), cont=g,expand=TRUE)
-    .$og = ggroup(cont=f, expand=TRUE)
-    .$ig = ggroup(cont=.$og, expand=TRUE)                # to be deleted
+    f = gframe(gettext("preview"), container=g,expand=TRUE)
+    .$og = ggroup(container=f, expand=TRUE)
+    .$ig = ggroup(container=.$og, expand=TRUE)                # to be deleted
     makePreview()
 
     ## now add handler
@@ -347,28 +347,28 @@ importFile = function(filename, ext=NULL) {
     .$FUN = "read.DIF"
     .$args = list(file = gedit(.$filename))
 
-    g = ggroup(horizontal=FALSE, cont=.$container)
-    glabel(paste(gettext("Read"),basename(.$filename),collapse=" "), cont=g)
+    g = ggroup(horizontal=FALSE, container=.$container)
+    glabel(paste(gettext("Read"),basename(.$filename),collapse=" "), container=g)
 
-    tbl <- glayout(cont=g)
+    tbl <- glayout(container=g)
     tbl[1,1] <- .$AssignToText
-    tbl[1,2] <- (.$varName <- gedit("X", cont=tbl))
+    tbl[1,2] <- (.$varName <- gedit("X", container=tbl))
     .$varName[] <- ls(envir=.GlobalEnv)
     visible(tbl) <- TRUE
 
          
-    f= gframe(gettext("Import"), cont=g)
-    tbl <- glayout(cont=f)
+    f= gframe(gettext("Import"), container=g)
+    tbl <- glayout(container=f)
     tbl[1,1] <- gettext("Header")
-    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(FALSE,TRUE), cont=tbl))
+    tbl[1,2] <- (.$args[['header']] <- gdroplist(c(FALSE,TRUE), container=tbl))
     tbl[2,1] <- gettext("Skip lines")
-    tbl[2,2] <- (.$args[["skip"]] <- gspinbutton(0,1000, cont=tbl))
+    tbl[2,2] <- (.$args[["skip"]] <- gspinbutton(0,1000, container=tbl))
     tbl[2,3] <- gettext("Skip blank lines")
-    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), cont=tbl))
+    tbl[2,4] <- (.$args[['blank.lines.skip']] <- gdroplist(c(FALSE,TRUE), container=tbl))
     tbl[3,1] <- gettext("NA string")
-    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", cont=tbl))
+    tbl[3,2] <- (.$args[['na.strings']] <- gedit("NA", container=tbl))
     tbl[3,3] <- gettext("Strings as factors")
-    tbl[3,4] <- (.$args[['stringsAsFactors']] <- gdroplist(c(TRUE,FALSE),cont=tbl))
+    tbl[3,4] <- (.$args[['stringsAsFactors']] <- gdroplist(c(TRUE,FALSE),container=tbl))
     visible(tbl) <- TRUE
 
 
@@ -379,8 +379,8 @@ importFile = function(filename, ext=NULL) {
       df= try(do.call(.$FUN,l), silent=TRUE)
       if(!inherits(df,"try-error")) {
         delete(.$og,.$ig)
-        .$ig <- ggroup(horizontal=FALSE, cont=.$og, expand=TRUE)
-        tmp <- gdf(df,cont=.$ig) ## get rownames
+        .$ig <- ggroup(horizontal=FALSE, container=.$og, expand=TRUE)
+        tmp <- gdf(df,container=.$ig) ## get rownames
 ##         enabled(tmp) <- FALSE ## too faint
       } else {
         cat(gettext("Error:"),df,"\n")
@@ -388,9 +388,9 @@ importFile = function(filename, ext=NULL) {
     }
 
     ## do names?
-    f = gframe(gettext("preview"), cont=g, expand=TRUE)
-    .$og = ggroup(cont=f, expand=TRUE)
-    .$ig = ggroup(cont=.$og, expand=TRUE)                # to be deleted
+    f = gframe(gettext("preview"), container=g, expand=TRUE)
+    .$og = ggroup(container=f, expand=TRUE)
+    .$ig = ggroup(container=.$og, expand=TRUE)                # to be deleted
     makePreview()
 
     ## now add handler
@@ -405,13 +405,13 @@ importFile = function(filename, ext=NULL) {
 
     fileType = names(.fileExtensions)[sapply(.fileExtensions,function(i) .$ext %in% i)]
         ## strip s
-    g = ggroup(horizontal=FALSE, cont=.$container)
+    g = ggroup(horizontal=FALSE, container=.$container)
 
     glabel(paste(gettext("Read"),basename(.$filename),gettext("as"),popchar(fileType),collapse=" "),
-           cont=g)
-    tbl = glayout(cont=g)
+           container=g)
+    tbl = glayout(container=g)
     tbl[1,1] <- .$AssignToText
-    tbl[1,2] <- (.$varName <- gedit("X", cont=tbl))
+    tbl[1,2] <- (.$varName <- gedit("X", container=tbl))
     .$varName[] <- ls(envir=.GlobalEnv)
 
     fmls = formals(get(.$FUN))
@@ -422,7 +422,7 @@ importFile = function(filename, ext=NULL) {
       for(i in 2:n) {
         tbl[i,1] <- nfmls[i]
         tbl[i,2] <- (.$args[[nfmls[i]]] <-
-                     gedit(fmls[[i]], cont=tbl,
+                     gedit(fmls[[i]], container=tbl,
                            coerce.with = paste("as.",class(fmls[[i]]),sep="", collapse="")
                            ))
         

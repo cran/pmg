@@ -2,18 +2,11 @@
 
 ## startup stuff
 ## options("guiToolkit"="RGtk2")
-## require(gWidgets)
-## require(gWidgetsRGtk2)
-## require(reshape)
 
 ## provides two functions: meltGUI and castGUI.
 ## How to improve these?
 
 pmg.meltGUI = function(container = pmgWC$new("Melt a data frame")) {
-  if(!do.call("require",list("reshape"))) {
-    cat("Need to install reshape package\n")
-    return()
-  }
     
 
   ## Helper functions
@@ -56,10 +49,10 @@ pmg.meltGUI = function(container = pmgWC$new("Melt a data frame")) {
 
 
   ## GUI
-  g = ggroup(horizontal=FALSE, cont=container, raise.on.dragmotion = TRUE)
-  glabel("Melt a data frame", cont=g)
+  g = ggroup(horizontal=FALSE, container=container, raise.on.dragmotion = TRUE)
+  glabel("Melt a data frame", container=g)
 
-  layout = glayout(cont=g)
+  layout = glayout(container=g)
 
   ## theDF -- for data frame name
   layout[1,1] = glabel("data frame:")
@@ -93,16 +86,16 @@ pmg.meltGUI = function(container = pmgWC$new("Melt a data frame")) {
   
   ## preview area
   add(g,gseparator(horizontal=TRUE))
-  previewGroup = gexpandgroup("Preview",cont=g)
+  previewGroup = gexpandgroup("Preview",container=g)
   thePreview  =  glabel("")
   add(previewGroup, thePreview, expand=TRUE) # use delete/add to chnage
   visible(previewGroup) <- TRUE              # open as default
   
   ## saveAs area
   add(g,gseparator(horizontal=TRUE))
-  saveAsGroup = ggroup(cont=g)
-  saveAsButton = gbutton("Save output as:",cont=saveAsGroup)
-  saveAs = gedit("",cont=saveAsGroup)
+  saveAsGroup = ggroup(container=g)
+  saveAsButton = gbutton("Save output as:",container=saveAsGroup)
+  saveAs = gedit("",container=saveAsGroup)
   enabled(saveAsGroup) <- FALSE
   ## End of layout
 
@@ -157,7 +150,7 @@ pmg.meltGUI = function(container = pmgWC$new("Melt a data frame")) {
         return()
     }
                          
-    assign(varName, newMelt, envir=.GlobalEnv)
+    assign_global(varName, newMelt)
 
     enabled(saveAsGroup) <- FALSE
   }
@@ -172,13 +165,8 @@ pmg.meltGUI = function(container = pmgWC$new("Melt a data frame")) {
 
 pmg.castGUI = function(container=pmgWC$new("Cast data")) {
 
-  if(!do.call("require",list("reshape"))) {
-    cat("Need to install reshape package\n")
-    return()
-  }
-
   
-  g = ggroup(horizontal=FALSE, cont=container, raise.on.dragmotion = TRUE)
+  g = ggroup(horizontal=FALSE, container=container, raise.on.dragmotion = TRUE)
 
   theData = gedit("", width=75)
 
@@ -210,9 +198,9 @@ pmg.castGUI = function(container=pmgWC$new("Cast data")) {
   updateButton = gbutton("update")
   
   ## the layout
-  glabel("Cast a melted data set", cont=g)
+  glabel("Cast a melted data set", container=g)
   
-  layout = glayout(cont=g)
+  layout = glayout(container=g)
 
   layout[1,1] = glabel("data:")
   layout[1,2] = theData
@@ -246,16 +234,16 @@ pmg.castGUI = function(container=pmgWC$new("Cast data")) {
 
   ## preview
   add(g,gseparator(horizontal=TRUE))
-  previewGroup = gexpandgroup("Preview",cont=g)
+  previewGroup = gexpandgroup("Preview",container=g)
   thePreview  =  glabel("")
   add(previewGroup, thePreview, expand=TRUE) # use delete/add to chnage
   visible(previewGroup) <- TRUE              # open as default
 
   ## saveAs area
   add(g,gseparator(horizontal=TRUE))
-  saveAsGroup = ggroup(cont=g)
-  saveAsButton = gbutton("Save output as:",cont=saveAsGroup)
-  saveAs = gedit("",cont=saveAsGroup)
+  saveAsGroup = ggroup(container=g)
+  saveAsButton = gbutton("Save output as:",container=saveAsGroup)
+  saveAs = gedit("",container=saveAsGroup)
 
   ##################################################
   ## helper functions
@@ -480,7 +468,7 @@ pmg.castGUI = function(container=pmgWC$new("Cast data")) {
         return()
     }
     
-    assign(varName, theVals$value, envir=.GlobalEnv)
+    assign_global(varName, theVals$value)
     enabled(saveAsGroup) <- FALSE
 
   }

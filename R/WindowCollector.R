@@ -1,11 +1,5 @@
 ## Store windows for gWidgets
 
-## require(proto)
-## require(gWidgets)
-## options("guiToolkit"="RGtk2")
-## source("~/pmg/pmg/R/BasicWidgets.R")
-
-
 ## the windowcollector is a place to organize windows within pmg
 ## methods
 ## new -- returns a new window
@@ -17,9 +11,9 @@
 
 winCollector = BasicGUI$new("message"="Open windows")
 winCollector$makeBody = function(.,container) {
-  g = ggroup(horizontal = FALSE, cont=container, expand=TRUE)
-  glabel("window list", cont=g)
-  .$tbl <- gtable(.$summary(), chosencol=2,cont = g, expand=TRUE)
+  g = ggroup(horizontal = FALSE, container=container, expand=TRUE)
+  glabel("window list", container=g)
+  .$tbl <- gtable(.$summary(), chosencol=2,container=g, expand=TRUE)
   ## add stuff, handlers buttons
   ## double click -- raise
   addHandlerDoubleclick(.$tbl, function(h,...) {
@@ -30,17 +24,17 @@ winCollector$makeBody = function(.,container) {
   })
 }
 winCollector$makeButtons = function(.,container) {
-  bg = ggroup(cont=container)
+  bg = ggroup(container=container)
   addSpring(bg)
-  gbutton("cancel",cont=bg, handler = function(h,...) dispose(.$window))
+  gbutton("cancel",container=bg, handler = function(h,...) dispose(.$window))
   addSpace(bg,10)
-  gbutton("Raise", cont=bg, handler = function(h,...) {
+  gbutton("Raise", container=bg, handler = function(h,...) {
     ID = svalue(.$tbl)
     if(length(ID) == 0) return(TRUE)    
     w = .$getWindow(ID)
     focus(w) <- TRUE
   })
-  gbutton("Delete window", cont=bg, handler= function(h,...) {
+  gbutton("Delete window", container=bg, handler= function(h,...) {
     ID = svalue(.$tbl)
     if(length(ID) == 0) return(TRUE)    
     w = .$getWindow(ID)

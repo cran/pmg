@@ -32,10 +32,10 @@ lsType = function(type, envir=.GlobalEnv) {
   objects = names(x)[sapply(x, function(i) any(i %in% type))]
   return(objects)
 }
-lsDatasets = function(envir=.GlobalEnv())  lsType(.datasets, envir)
-lsModels = function(envir=.GlobalEnv())  lsType(.models, envir)
-lsTs = function(envir=.GlobalEnv())  lsType(.ts, envir)
-lsFunctions = function(envir=.GlobalEnv())  lsType(.functions, envir)
+lsDatasets = function(envir=.GlobalEnv)  lsType(.datasets, envir)
+lsModels = function(envir=.GlobalEnv)  lsType(.models, envir)
+lsTs = function(envir=.GlobalEnv)  lsType(.ts, envir)
+lsFunctions = function(envir=.GlobalEnv)  lsType(.functions, envir)
 
 ###  These should be in gWidgets or gWidgetsRGtk2, but arent
 ## what type of object is thixs and a size
@@ -103,7 +103,7 @@ pmgSummary.default = function(obj, ...) {
   theValue = capture.output(eval(obj))
   if(length(theValue) > 10)
     theValue = c(theValue[1:10],"... 8< snipped >8 ...")
-  theHead = gtext(font.attr=c("monospace"))
+  theHead = gtext(font.attr=c(style="monospace"))
   add(theHead,theValue)
   enabled(theHead) <- FALSE
   add(group, theHead, expand=TRUE)

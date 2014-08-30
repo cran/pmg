@@ -20,7 +20,6 @@
 ##   or write makeButtons(.,container)
 ## statusbar: set statusbarText to get
 
-require(proto)
 BasicGUI = proto(
   new = function(., message = "Basic GUI",...) {
      .$proto(message=message,...)
@@ -39,25 +38,25 @@ BasicGUI = proto(
       .$window <- pmgWC$new(title = .$message,...)
     else
       .$window <- gwindow(title = .$message, ...)
-    g = ggroup(horizontal=FALSE, cont=.$window, expand=TRUE)
+    g = ggroup(horizontal=FALSE, container=.$window, expand=TRUE)
     ## group for toolbar and menubar
     if(!is.null(.$menubarList) || !is.null(.$toolbarList)) {
       g1 = ggroup(horizontal=FALSE, container=g, expand=FALSE) 
-      if(!is.null(.$menubarList)) .$menubar <- gmenu(.$menubarList, cont=g1)
-      if(!is.null(.$toolbarList)) .$toolbar <- gtoolbar(.$toolbarList, style="icons",cont=g1)
-      gseparator(cont=g1)
+      if(!is.null(.$menubarList)) .$menubar <- gmenu(.$menubarList, container=g1)
+      if(!is.null(.$toolbarList)) .$toolbar <- gtoolbar(.$toolbarList, style="icons",container=g1)
+      gseparator(container=g1)
     }
     ## container for body --e xpand = TRUE
     g1 = ggroup(horizontal=FALSE, container=g, expand=TRUE) # expand
     .$makeBody(container = g1)
     .$makeButtons(container = g)
     if(!is.null(.$statusbarText))
-      .$statusbar <- gstatusbar(.$statusbarText, cont=g)    
+      .$statusbar <- gstatusbar(.$statusbarText, container=g)    
   },
   makeBody = function(., container) {
-    glabel(.$message, cont=container)
+    glabel(.$message, container=container)
     if(length(.$widgetList) > 0) {
-      tbl <- glayout(cont=container)
+      tbl <- glayout(container=container)
       ctr = 1; 
       for(i in names(.$widgetList)) {
         tmp = .$widgetList[[i]]
@@ -73,25 +72,25 @@ BasicGUI = proto(
   },
   makeButtons = function(., container) {
     ## add buttons help, cancel, ok (if xxxButtonHandler is not NULL)
-    gseparator(cont=container)
-    bg = ggroup(cont=container)
+    gseparator(container=container)
+    bg = ggroup(container=container)
     if(!is.null(.$helpButtonHandler)) 
-      helpButton = gbutton("help", cont=bg,  
+      helpButton = gbutton("help", container=bg,  
         action = list(self=., super=.super),
         handler = .$helpButtonHandler)
     addSpring(bg)
     ## for these we take advantage of the fact that when we call
     ## the handlers this way the "." gets passed in via the first argument
     if(!is.null(.$cancelButtonHandler))
-      cancelButton = gbutton("cancel", cont=bg,  
+      cancelButton = gbutton("cancel", container=bg,  
         action = list(self=., super=.super),
         handler = .$cancelButtonHandler)
     if(!is.null(.$clearButtonHandler))
-      clearButton = gbutton("clear", cont=bg,  
+      clearButton = gbutton("clear", container=bg,  
         action = list(self=., super=.super),
         handler = .$clearButtonHandler)
     if(!is.null(.$okButtonHandler)) 
-      okButton = gbutton("ok", cont=bg, 
+      okButton = gbutton("ok", container=bg, 
         action = list(self=., super=.super),
         handler = .$okButtonHandler)
   },
@@ -166,7 +165,7 @@ BasicWidget = proto(
     .$makeBody(container=.$container)
   },
   makeBody = function(.,container) {
-    glabel("This space for rent", cont=container,...)
+    glabel("This space for rent", container=container,...)
   },
   getValue = function(.,...) {
     if(is.null(.$widget))
@@ -203,19 +202,19 @@ SelectItemsWithOrder$new = function(., container=NULL, allItems, curItems=c(), a
           allItemsLabel = allItemsLabel, curItemsLabel=curItemsLabel)
 } 
 SelectItemsWithOrder$makeBody = function(.,container,...) {
-  g = ggroup(cont = container)
-  g1 = ggroup(horizontal=FALSE, cont=g)
-  glabel(.$allItemsLabel, cont=g1)
-  .$tbl1 = gtable(setdiff(.$allItems,.$curItems), cont = g1, expand=TRUE)
-  .$leftRightArrow = gimage("rarrow",dirname="stock", cont=g)
-  g1 = ggroup(horizontal=FALSE, cont=g)
-  glabel(.$curItemsLabel, cont=g1)
-  .$tbl2 = gtable(.$allItems, cont=g1, expand=TRUE)
+  g = ggroup(container = container)
+  g1 = ggroup(horizontal=FALSE, container=g)
+  glabel(.$allItemsLabel, container=g1)
+  .$tbl1 = gtable(setdiff(.$allItems,.$curItems), container= g1, expand=TRUE)
+  .$leftRightArrow = gimage("rarrow",dirname="stock", container=g)
+  g1 = ggroup(horizontal=FALSE, container=g)
+  glabel(.$curItemsLabel, container=g1)
+  .$tbl2 = gtable(.$allItems, container=g1, expand=TRUE)
   .$tbl2[] <- .$curItems
-  bg = ggroup(horizontal=FALSE, cont=g)
+  bg = ggroup(horizontal=FALSE, container=g)
   addSpace(bg,50)
-  .$upArrow = gimage("uarrow", dirname="stock", cont=bg)
-  .$downArrow = gimage("darrow", dirname="stock", cont=bg)
+  .$upArrow = gimage("uarrow", dirname="stock", container=bg)
+  .$downArrow = gimage("darrow", dirname="stock", container=bg)
 
   ## assign widget
   .$widget <- .$tbl2
@@ -291,10 +290,10 @@ SelectItemsWithSelectionOrder$new = function(.,container=NULL,items=c(),label=""
   .$proto(container=container, items=items, label=label, chosencol=1, value=c())
 }
 SelectItemsWithSelectionOrder$makeBody = function(.,container,...) {
-  g = ggroup(horizontal=FALSE, cont=container,...)
-  glabel(.$label, cont=g)
+  g = ggroup(horizontal=FALSE, container=container,...)
+  glabel(.$label, container=g)
   .$widget = gtable(.$items, multiple=TRUE, chosencol=.$chosencol,
-    cont=g, expand=TRUE)
+    container=g, expand=TRUE)
   addHandlerClicked(.$widget, function(h,...) {
     ## set .$value based on number set. curvalue of value
     curVals = svalue(.$widget, index=TRUE)
@@ -330,15 +329,15 @@ UpDownTable$new = function(., container=NULL, items=c(),label="") {
   .$proto(container=container, items=items, label=label)
 } 
 UpDownTable$makeBody = function(.,container,...) {
-##  g = ggroup(cont = .$container)
-  g = gframe(.$label, cont=container, expand=TRUE)
-  lg = ggroup(horizontal=FALSE, cont=g, expand=TRUE)
-##  glabel(.$label, cont=lg)
-  .$widget = gtable(.$items, cont=lg, expand=TRUE)
-  bg = ggroup(horizontal=FALSE, cont=g)
+##  g = ggroup(container= .$container)
+  g = gframe(.$label, container=container, expand=TRUE)
+  lg = ggroup(horizontal=FALSE, container=g, expand=TRUE)
+##  glabel(.$label, container=lg)
+  .$widget = gtable(.$items, container=lg, expand=TRUE)
+  bg = ggroup(horizontal=FALSE, container=g)
   addSpace(bg,50)
-  .$upArrow = gimage("uarrow", dirname="stock", cont=bg)
-  .$downArrow = gimage("darrow", dirname="stock", cont=bg)
+  .$upArrow = gimage("uarrow", dirname="stock", container=bg)
+  .$downArrow = gimage("darrow", dirname="stock", container=bg)
 
   ## add handlers
   addHandlerClicked(.$upArrow,  handler = function(h,...) {

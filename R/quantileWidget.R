@@ -174,8 +174,8 @@ quantileWidget = function(container=NULL) {
     options("digits"=oldDigits)
 
     dispose(outputArea)
-    add(outputArea, "Quantiles:\n",font.attr=c("monospace","blue"))
-    add(outputArea, outValue, font.attr=c("monospace"))
+    add(outputArea, "Quantiles:\n",font.attr=c(style="monospace",color="blue"))
+    add(outputArea, outValue, font.attr=c(style="monospace"))
 
     svalue(outputArea) <- c("Quantiles:\n",outValue)
   }

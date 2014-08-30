@@ -25,7 +25,8 @@ pmg.loadPackages = function(width=300, height=400) {
         svalue(status)
       } else {
         svalue(status) <- Paste("Load package ",package)
-        res = require(package, character.only=TRUE)
+	fn <- get("require")
+        res = fn(package, character.only=TRUE)
         if(res == FALSE)
           cat(Paste("Couldn't load package",package,"\n"))
         else

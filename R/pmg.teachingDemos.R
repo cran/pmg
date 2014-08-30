@@ -87,7 +87,7 @@ templateForDemo = list(
 ## open a window showing the possible demos
 pmg.teachingDemos = function(...) {
 
-  ### This is really annoying, but to avoid calling these when defining the list, I put them inside this function
+### This is really annoying, but to avoid calling these when defining the list, I put them inside this function
 histogramDemo = list(
   widgets = list(
     "data set" = gedit(""),
@@ -107,7 +107,6 @@ histogramDemo = list(
 
     theTitle = paste(noBins,"bins and ", length(dataSet),"observations" )
     
-    require(lattice)
     print(histogram(dataSet, nint=noBins, xlab=theTitle))
     
     return(file)
@@ -190,15 +189,15 @@ CLTDemo = list(
     
     switch(Distribution,
            "Normal" = {
-             curve(dnorm(x), from=-3, to = 3, lwd=2)
+             curve(function(x) dnorm(x), from=-3, to = 3, lwd=2)
              abline(v=0)
            },
            "Long tailed" = {
-             curve(dt(x,df=3), from = -3.5, to = 3.5, lwd=2)
+             curve(function(x) dt(x,df=3), from = -3.5, to = 3.5, lwd=2)
              abline(v=0)
            },
            "Skewed" = {
-             curve(dexp(x), from = 0, to = 3, lwd=2)
+             curve(function(x) dexp(x), from = 0, to = 3, lwd=2)
              if(Statistic == "mean")
                abline(v=1)
              else
@@ -245,7 +244,8 @@ CLTDemo = list(
   )
 
 ## start with an assignment
-assign(".binomialDemo.results",c(),envir=.GlobalEnv)
+.binomialDemo.results <- c()
+#assign(".binomialDemo.results",c(),envir=.GlobalEnv)
 binomialDemo = list(
   widgets = list(
     "Size of sample, n" = gslider(from=5,to=50,by=5,value=10),
@@ -264,7 +264,7 @@ binomialDemo = list(
     clear = valLst[[5]]
 
     if(!exists(".binomialDemo.results"))
-      assign(".binomialDemo.results",c(),envir=.GlobalEnv)
+        assign_global(".binomialDemo.results",c())
     if(clear)
       .binomialDemo.results <<- c()
 
@@ -411,7 +411,8 @@ powerDemo = list(
     }
   mb$Demo$"histogram and density"$handler = 
     function(...) {
-      add(nb, histogramAndDensity(NULL), label = "View histogram and density")
+        histogramAndDensity(nb, label="View histogram and density")
+#      add(nb, histogramAndDensity(nb), label = "View histogram and density")
       svalue(sb) <- ""
     }
   mb$Demo$"Binomial distribution"$handler =
@@ -421,8 +422,8 @@ powerDemo = list(
     }
   mb$Demo$"construction of normal"$handler = 
     function(...) {
-      add(nb, constructionOfNormal(NULL), label = "See normal from sum")
-      svalue(sb) <-  ""
+        constructionOfNormal(nb, label = "See normal from sum")
+        svalue(sb) <-  ""
     }
   mb$Demo$"Central Limit Theorem"$handler =
     function(...) {
@@ -450,6 +451,6 @@ powerDemo = list(
   nb = gnotebook(closebuttons=TRUE)
   add(group, nb, expand=TRUE)
 
-sb <- gstatusbar(gettext("Select a demo from the menubar above"), cont=group)
+sb <- gstatusbar(gettext("Select a demo from the menubar above"), container=group)
 }
                 

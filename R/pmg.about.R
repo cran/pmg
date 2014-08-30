@@ -1,9 +1,9 @@
 
 checkForUpdatesGUI = function() {
   win = pmgWC$new("Check for updates", visible=FALSE)
-  g = ggroup(horizontal = FALSE, cont=win)
-  l = glabel(".-.-.-", cont=g, expand=TRUE)
-  sb = gstatusbar("Checking for updates", cont=g)
+  g = ggroup(horizontal = FALSE, container=win)
+  l = glabel(".-.-.-", container=g, expand=TRUE)
+  sb = gstatusbar("Checking for updates", container=g)
   visible(win) <- TRUE
   
   val = checkForUpdates()
@@ -53,10 +53,10 @@ getCranSiteIfNeeded = function() {
       setCRAN(URL)       # set URL
     }
 
-    g = ggroup(horizontal = FALSE, cont = NULL)
-    glabel("Select a site\nthen click 'OK'", cont=g)
+    g = ggroup(horizontal = FALSE, container= NULL)
+    glabel("Select a site\nthen click 'OK'", container=g)
     tbl <- gtable(
-                  items=utils:::getCRANmirrors(),
+                  items=utils::getCRANmirrors(),
                   chosencol=4,     
                   filter.column=2,
                   container=g,

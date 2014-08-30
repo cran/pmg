@@ -5,8 +5,7 @@
 ## probabilityCalculator -- get Type of calculation spelled correctly
 ## * speed up the drawing
 ## constructionOFNormal -- add handler to no. of variables., ... m and n
-histogramAndDensity = function(container=gwindow("Window 1: idea of a density")) {
-  library(gWidgets)
+histogramAndDensity = function(container=gwindow("Window 1: idea of a density", visible=FALSE), ...) {
 
   availDists = c(Uniform = "unif", Normal = "norm", Gamma = "gamma")
   theParams = list(
@@ -31,14 +30,10 @@ histogramAndDensity = function(container=gwindow("Window 1: idea of a density"))
     
     rfunc = paste("r",availDists[svalue(distribution)],sep="")
     dfunc = paste("d",availDists[svalue(distribution)],sep="")
-    x = do.call(rfunc, list(svalue(sampleSize),svalue(param1),svalue(param2)))
-    if(nchar(svalue(cutpoints))) {
-      breaks = unlist(strsplit(svalue(cutpoints)," "))
-      breaks = breaks[breaks!=""]
-      if(!length(breaks)) breaks="sturges"
-      else breaks = as.numeric(breaks)
-    }
-    else { breaks = "sturges" }
+    x <- do.call(rfunc, list(svalue(sampleSize),svalue(param1),svalue(param2)))
+    breaks <- svalue(cutpoints)
+    if(is.null(breaks))
+        breaks <- "sturges"
 
     hh=hist(x,breaks=breaks,plot=FALSE)
     ## now plot histogram
@@ -65,7 +60,8 @@ histogramAndDensity = function(container=gwindow("Window 1: idea of a density"))
   addDensity = function(...) {
     dfunc = paste("d",availDists[svalue(distribution)],sep="")
     dFunc = get(dfunc)
-    curve(dFunc(x, svalue(param1), svalue(param2)), lwd=2, col="red",add=T)
+    f <- function(x) dFunc(x, svalue(param1), svalue(param2))
+    curve(f, lwd=2, col="red",add=T)
   }
 
   ## the distribution used
@@ -89,8 +85,8 @@ histogramAndDensity = function(container=gwindow("Window 1: idea of a density"))
 
 
   sampleSize = gradio(c(500, 5000, 50000),handler=updatePlot)
-displayWhat = gradio(c("Counts","Frequencies","Density of frequencies"),handler=updatePlot)
-displayFunc = gcheckbox("Theoretical density",handler=addDensity)
+  displayWhat = gradio(c("Counts","Frequencies","Density of frequencies"),handler=updatePlot)
+  displayFunc = gcheckbox("Theoretical density",handler=addDensity)
 
   param1label = glabel(theParams[[availDists[1]]][1])
   param2label = glabel(theParams[[availDists[1]]][2])
@@ -100,42 +96,44 @@ displayFunc = gcheckbox("Theoretical density",handler=addDensity)
   cutpoints = gedit("",coerce.with=rpel)
 
 
-BigGroup = ggroup(cont = container)
-group = ggroup(horizontal = FALSE, container = BigGroup)
-
-
-tmp = gframe("Distribution", container = group)
-distribGroup = glayout(container=tmp)
-distribGroup[1,1]=glabel("Law")
-distribGroup[1,2]=distribution
-distribGroup[2,1]=param1label
-distribGroup[2,2]=param1
-distribGroup[3,1]=param2label
-distribGroup[3,2]=param2
-visible(distribGroup)=TRUE
-
-tmp = gframe("Sample size", container = group)
-add(tmp, sampleSize)
-
-tmp = gframe("Display", container = group)
-add(tmp,displayWhat)
-#add(tmp,displayFunc)
-
-tmp = gframe("Cutpoints", container = group)
-add(tmp,cutpoints,expand=TRUE)
-
-addSpring(group)
-
-buttonGroup=ggroup(container=group)
-
+  BigGroup = ggroup(container= container, ...)
+  group = ggroup(horizontal = FALSE, container = BigGroup)
+  
+  
+  tmp = gframe("Distribution", container = group)
+  distribGroup = glayout(container=tmp)
+  distribGroup[1,1]=glabel("Law")
+  distribGroup[1,2]=distribution
+  distribGroup[2,1]=param1label
+  distribGroup[2,2]=param1
+  distribGroup[3,1]=param2label
+  distribGroup[3,2]=param2
+  visible(distribGroup)=TRUE
+  
+  tmp = gframe("Sample size", container = group)
+  add(tmp, sampleSize)
+  
+  tmp = gframe("Display", container = group)
+  add(tmp,displayWhat)
+                                        #add(tmp,displayFunc)
+  
+  tmp = gframe("Cutpoints", container = group)
+  add(tmp,cutpoints,expand=TRUE)
+  
+  addSpring(group)
+  
+  buttonGroup=ggroup(container=group)
+  
   if(missing(container))
     gbutton("cancel", container=buttonGroup, handler = function(h,...) dispose(container))
-
+  
   addSpring(buttonGroup)
-gbutton("display",container=buttonGroup, handler=updatePlot)
+  gbutton("display",container=buttonGroup, handler=updatePlot)
+  
+  add(BigGroup, ggraphics())
 
-add(BigGroup, ggraphics())
-
+  visible(container) <- TRUE
+  
   invisible(BigGroup)
   
 }
@@ -145,101 +143,99 @@ add(BigGroup, ggraphics())
 ## probability calculator
 probabilityCalculator = function(container=gwindow("Probability caculator")) {
 
-  library(gWidgets)
+    availDists = c(Normal="norm",Student="t","Chi-2"="chisq",
+        Fisher="f",Binomial="binom",Poisson="pois",Gamma="gamma",Beta="beta")
 
-availDists = c(Normal="norm",Student="t","Chi-2"="chisq",Fisher="f",Binomial="binom",Poisson="pois",Gamma="gamma",Beta="beta")
-
-  theParams = list(
-    "norm" = c("mean","sd",0,1),
-    "t" = c("df","ncp","",0),
-    "chisq" = c("df","ncp","",0),
-    "f" = c("df1","df2","",""),
-    "binom"=c("size","prob",1,.5),
-    "pois" = c("lambda","",1,""),
+    theParams = list(
+        "norm" = c("mean","sd",0,1),
+        "t" = c("df","ncp","",0),
+        "chisq" = c("df","ncp","",0),
+        "f" = c("df1","df2","",""),
+        "binom"=c("size","prob",1,.5),
+        "pois" = c("lambda","",1,""),
     "gamma" = c("shape","rate","",1),
-    "beta" = c("shape1","shape2","",""),
-    "unif" = c("min","max",0,1)
-    )
+        "beta" = c("shape1","shape2","",""),
+        "unif" = c("min","max",0,1)
+        )
+    
+    initOptions = function(h, ...) {
+        
+        r2s.distrib = svalue(distribution)
+        r2s.is1P = r2s.distrib %in% c("Student","Chi-2","Poisson")
+        if(r2s.is1P) svalue(param2)=""
+        svalue(result)=""
+        svalue(value)=""
+        
+    }
+
+    updatePlot = function(h, ...) {
   
-initOptions = function(h, ...) {
+        r2s.distrib = svalue(distribution)
+        r2s.param1 = svalue(param1)
+        r2s.param2 = svalue(param2)
+        r2s.value = svalue(value)
+        
 
- r2s.distrib = svalue(distribution)
- r2s.is1P = r2s.distrib %in% c("Student","Chi-2","Poisson")
- if(r2s.is1P) svalue(param2)=""
- svalue(result)=""
- svalue(value)=""
+        r2s.p = svalue(calcWhat) == "Find quantile"
+        r2s.right = svalue(side)=="to right"
 
-}
+        r2s.isDiscrete = r2s.distrib %in% c("Binomial","Poisson")
+        r2s.is1P = r2s.distrib %in% c("Student","Chi-2","Poisson")
+        r2s.is01 = function(x) (x>=0)&&(x<=1)
+        r2s.isInteger = function(x) abs(x)==round(x)
+        r2s.probf = availDists
 
-updatePlot = function(h, ...) {
+        r2s.dfunction = eval(parse(text=paste("d",r2s.probf[r2s.distrib],sep="")))
+        r2s.pfunction = eval(parse(text=paste("p",r2s.probf[r2s.distrib],sep="")))
+        r2s.qfunction = eval(parse(text=paste("q",r2s.probf[r2s.distrib],sep="")))
+        r2s.rfunction = eval(parse(text=paste("r",r2s.probf[r2s.distrib],sep="")))
 
+        ## Chosen distribution has two parameters
+        if(!r2s.is1P) {
+            ## Check parameter values
+            if(r2s.distrib=="Binomial") {
+                stopifnot(r2s.isInteger(r2s.param1) && r2s.is01(r2s.param2)) }
+            if(r2s.distrib=="Fisher") {
+                stopifnot(r2s.isInteger(r2s.param1) && r2s.isInteger(r2s.param2))
+            }
 
-  
-  r2s.distrib = svalue(distribution)
-  r2s.param1 = svalue(param1)
-  r2s.param2 = svalue(param2)
-  r2s.value = svalue(value)
-
-
- r2s.p = svalue(calcWhat) == "Find quantile"
- r2s.right = svalue(side)=="to right"
-
- r2s.isDiscrete = r2s.distrib %in% c("Binomial","Poisson")
- r2s.is1P = r2s.distrib %in% c("Student","Chi-2","Poisson")
- r2s.is01 = function(x) (x>=0)&&(x<=1)
- r2s.isInteger = function(x) abs(x)==round(x)
- r2s.probf = availDists
-
- r2s.dfunction = eval(parse(text=paste("d",r2s.probf[r2s.distrib],sep="")))
- r2s.pfunction = eval(parse(text=paste("p",r2s.probf[r2s.distrib],sep="")))
- r2s.qfunction = eval(parse(text=paste("q",r2s.probf[r2s.distrib],sep="")))
- r2s.rfunction = eval(parse(text=paste("r",r2s.probf[r2s.distrib],sep="")))
-
- # Chosen distribution has two parameters
- if(!r2s.is1P) {
-   # Check parameter values
-   if(r2s.distrib=="Binomial") {
-     stopifnot(r2s.isInteger(r2s.param1) && r2s.is01(r2s.param2)) }
-   if(r2s.distrib=="Fisher") {
-     stopifnot(r2s.isInteger(r2s.param1) && r2s.isInteger(r2s.param2)) }
-
-   if(r2s.p) {
-     r2s.prob = r2s.value
-     if(!r2s.isDiscrete) {
-       if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1,r2s.param2)
-       else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1,r2s.param2)
+            if(r2s.p) {
+                r2s.prob = r2s.value
+                if(!r2s.isDiscrete) {
+                    if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1,r2s.param2)
+                    else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1,r2s.param2)
+                } else {
+                    if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1,r2s.param2)
+                    else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1,r2s.param2)
+                }} else {
+                    if(!r2s.isDiscrete) {
+                        if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value,r2s.param1,r2s.param2) } else {
+                            r2s.prob = r2s.pfunction(r2s.value,r2s.param1,r2s.param2)}} else {
+                                if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value-1,r2s.param1,r2s.param2) } else {
+                                    r2s.prob = r2s.pfunction(r2s.value,r2s.param1,r2s.param2)}}}
+            
+            r2s.dens = r2s.dfunction(r2s.value,r2s.param1,r2s.param2)
+                                        # Chosen distribution has only one parameter
+        } else {
+            
+            svalue(param2)=""
+            
+            if(r2s.distrib=="Student") {
+                stopifnot(r2s.isInteger(r2s.param1)) }
+            if(r2s.distrib=="Chi-2") {
+                stopifnot(r2s.isInteger(r2s.param1)) }
+            
+            if(r2s.p) {
+                r2s.prob = r2s.value
+                if(!r2s.isDiscrete) {
+                    if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1)
+                    else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1)
      } else {
-       if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1,r2s.param2)
-       else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1,r2s.param2)
+         if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1)
+         else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1)
      }} else {
        if(!r2s.isDiscrete) {
-         if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value,r2s.param1,r2s.param2) } else {
-                         r2s.prob = r2s.pfunction(r2s.value,r2s.param1,r2s.param2)}} else {
-         if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value-1,r2s.param1,r2s.param2) } else {
-                         r2s.prob = r2s.pfunction(r2s.value,r2s.param1,r2s.param2)}}}
-
-   r2s.dens = r2s.dfunction(r2s.value,r2s.param1,r2s.param2)
- # Chosen distribution has only one parameter
- } else {
-
-   svalue(param2)=""
-
-   if(r2s.distrib=="Student") {
-     stopifnot(r2s.isInteger(r2s.param1)) }
-   if(r2s.distrib=="Chi-2") {
-     stopifnot(r2s.isInteger(r2s.param1)) }
-
-   if(r2s.p) {
-     r2s.prob = r2s.value
-     if(!r2s.isDiscrete) {
-       if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1)
-       else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1)
-     } else {
-       if(r2s.right) r2s.value = r2s.qfunction(1-r2s.prob,r2s.param1)
-       else          r2s.value = r2s.qfunction(r2s.prob,r2s.param1)
-     }} else {
-       if(!r2s.isDiscrete) {
-         if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value,r2s.param1) } else {
+           if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value,r2s.param1) } else {
                          r2s.prob = r2s.pfunction(r2s.value,r2s.param1)}} else {
          if(r2s.right) { r2s.prob = 1-r2s.pfunction(r2s.value-1,r2s.param1) } else {
                          r2s.prob = r2s.pfunction(r2s.value,r2s.param1)}}}
@@ -262,14 +258,14 @@ updatePlot = function(h, ...) {
    if(!r2s.isDiscrete) {
      from = ifelse(r2s.distrib=="Normal",r2s.param1-4*r2s.param2,0)
      to = ifelse(r2s.distrib=="Normal",r2s.param1+4*r2s.param2,max(r2s.rfunction(1000,r2s.param1,r2s.param2)))
-     curve(r2s.dfunction(x,r2s.param1,r2s.param2),n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
+     curve(function(x) r2s.dfunction(x,r2s.param1,r2s.param2),n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
      if(!r2s.right) {
        r2s.z = seq(from,r2s.value,len=1000)
        for(i in r2s.z) lines(rbind(c(i,0),c(i,r2s.dfunction(i,r2s.param1,r2s.param2))),lwd=2,col="red")
      } else {
          r2s.z = seq(r2s.value,to,len=1000)
          for(i in r2s.z) lines(rbind(c(i,0),c(i,r2s.dfunction(i,r2s.param1,r2s.param2))),lwd=2,col="red") }
-     r2s.dum=curve(r2s.dfunction(x,r2s.param1,r2s.param2),add=TRUE,n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
+     r2s.dum=curve(function(x) r2s.dfunction(x,r2s.param1,r2s.param2),add=TRUE,n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
    } else {
      from = 0
      to = ifelse(r2s.distrib=="Binomial",r2s.param1,max(r2s.rfunction(1000,r2s.param1,r2s.param2)))
@@ -287,14 +283,14 @@ updatePlot = function(h, ...) {
    if(!r2s.isDiscrete) {
      from = ifelse(r2s.distrib=="Student",min(r2s.rfunction(1000,r2s.param1)),0)
      to = max(r2s.rfunction(1000,r2s.param1))
-     curve(r2s.dfunction(x,r2s.param1),n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
+     curve(function(x) r2s.dfunction(x,r2s.param1),n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
      if(!r2s.right) {
        r2s.z = seq(from,r2s.value,len=1000)
        for(i in r2s.z) lines(rbind(c(i,0),c(i,r2s.dfunction(i,r2s.param1))),lwd=2,col="red")
      } else {
          r2s.z = seq(r2s.value,to,len=1000)
          for(i in r2s.z) lines(rbind(c(i,0),c(i,r2s.dfunction(i,r2s.param1))),lwd=2,col="red") }
-     r2s.dum=curve(r2s.dfunction(x,r2s.param1),add=TRUE,n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
+     r2s.dum=curve(function(x) r2s.dfunction(x,r2s.param1),add=TRUE,n=1000,from=from,to=to,lwd=2,main=r2s.title,xlab=r2s.xlab,ylab=r2s.ylab)
    } else {
      from = 0
      to = max(r2s.rfunction(1000,r2s.param1))
@@ -340,7 +336,7 @@ side = gradio(c("to left","to right"))
   value  = gedit(width=15, handler = updatePlot,coerce.with=rpel)
   result = glabel("")
 
-BigGroup = ggroup(cont = container)
+BigGroup = ggroup(container= container)
 group = ggroup(horizontal = FALSE, container = BigGroup)
 
 tmp = gframe("Distribution", container = group)
@@ -380,9 +376,8 @@ add(BigGroup, ggraphics())
   invisible(BigGroup)
 }
 
-constructionOfNormal = function(container = gwindow("Construction of normal from X1 + X2 + ... + Xn")) {
+constructionOfNormal = function(container = gwindow("Construction of normal from X1 + X2 + ... + Xn", visible=FALSE), ...) {
   
-  library(gWidgets)
   
   availDists = c(Uniform = "unif", Binomial = "binom", Normal = "norm")
   theParams = list(
@@ -398,42 +393,42 @@ constructionOfNormal = function(container = gwindow("Construction of normal from
     )
   
   updatePlot = function(h, ...) {
-    
-    rfunc = paste("r",availDists[svalue(distribution)],sep="")
-    y = do.call(rfunc, list(svalue(sampleSize)*svalue(nvar),
-      svalue(param1),svalue(param2)))
-    z = rowSums(matrix(y,svalue(sampleSize),svalue(nvar)))
-    
-    xlab="Values of the variable"
-    title = paste("Distribution :",svalue(distribution))
-    ylab = "Densities/Probabilities"
- if(svalue(distribution)!="Binomial") {
-   hist(z,freq=FALSE,main=title,xlab=xlab,ylab=ylab)
- }
- else {
-   res = plot(table(z)/svalue(sampleSize),main=title,xlab=xlab,ylab=ylab)
- }
- if(svalue(displayFunc)) curve(dnorm(x,mean(z),sd(z)),from=min(z),to=max(z),add=TRUE,lwd=2,col=2)
-}
+      
+      rfunc = paste("r",availDists[svalue(distribution)],sep="")
+      y = do.call(rfunc, list(svalue(sampleSize)*svalue(nvar),
+        svalue(param1),svalue(param2)))
+      z = rowSums(matrix(y,svalue(sampleSize),svalue(nvar)))
+      
+      xlab="Values of the variable"
+      title = paste("Distribution :",svalue(distribution))
+      ylab = "Densities/Probabilities"
+      if(svalue(distribution)!="Binomial") {
+          hist(z,freq=FALSE,main=title,xlab=xlab,ylab=ylab)
+      } else {
+          res = plot(table(z)/svalue(sampleSize),main=title,xlab=xlab,ylab=ylab)
+      }
+      if(svalue(displayFunc)) curve(function(x) dnorm(x,mean(z),sd(z)),
+                                    from=min(z),to=max(z),add=TRUE,lwd=2,col=2)
+  }
+  
+  distribution = gdroplist(names(availDists),horizontal=FALSE)
+  addhandlerchanged(distribution,handler = function(h,...) {
+      theDist = availDists[svalue(h$obj)]
 
-distribution = gdroplist(names(availDists),horizontal=FALSE)
-    addhandlerchanged(distribution,handler = function(h,...) {
-    theDist = availDists[svalue(h$obj)]
+      svalue(param1label) = theParams[[theDist]][1]
+      svalue(param1) = theParams[[theDist]][3]
 
-    svalue(param1label) = theParams[[theDist]][1]
-    svalue(param1) = theParams[[theDist]][3]
-
-    if(theParams[[theDist]][2] == "") {
-      svalue(param2label) = theParams[[theDist]][2]
-      svalue(param2) = ""      
-      enabled(param2) <- FALSE
-    } else {
-      enabled(param2) <- TRUE
-      svalue(param2label) = theParams[[theDist]][2]
-      svalue(param2) = theParams[[theDist]][4]
-    }
+      if(theParams[[theDist]][2] == "") {
+          svalue(param2label) = theParams[[theDist]][2]
+          svalue(param2) = ""      
+          enabled(param2) <- FALSE
+      } else {
+          enabled(param2) <- TRUE
+          svalue(param2label) = theParams[[theDist]][2]
+          svalue(param2) = theParams[[theDist]][4]
+      }
   })
-
+  
 
 
   param1label = glabel(theParams[[availDists[1]]][1])
@@ -448,39 +443,42 @@ distribution = gdroplist(names(availDists),horizontal=FALSE)
   displayFunc = gcheckbox("Show normal law",handler=updatePlot)
 
 
-BigGroup = ggroup(cont = container)
-group = ggroup(horizontal = FALSE, container = BigGroup)
+  BigGroup = ggroup(container= container, ...)
+  group = ggroup(horizontal = FALSE, container = BigGroup)
 
 
-tmp = gframe("Distribution", container = group)
-distribGroup = glayout(container=tmp)
-distribGroup[1,1]=glabel("Law")
-distribGroup[1,2]=distribution
-distribGroup[2,1]= param1label
-distribGroup[2,2]=param1
-distribGroup[3,1]= param2label
-distribGroup[3,2]=param2
-visible(distribGroup)=TRUE
+  tmp = gframe("Distribution", container = group)
+  distribGroup = glayout(container=tmp)
+  distribGroup[1,1]=glabel("Law")
+  distribGroup[1,2]=distribution
+  distribGroup[2,1]= param1label
+  distribGroup[2,2]=param1
+  distribGroup[3,1]= param2label
+  distribGroup[3,2]=param2
+  visible(distribGroup)=TRUE
 
-tmp = gframe("Score", container = group)
-distribSample = glayout(container=tmp)
-distribSample[1,1]=glabel("n for: X1 + ... + Xn")
-distribSample[1,2]=nvar
-distribSample[2,1]=glabel("Number of simulations")
-distribSample[2,2]=sampleSize
-visible(distribSample)=TRUE
+  tmp = gframe("Score", container = group)
+  distribSample = glayout(container=tmp)
+  distribSample[1,1]=glabel("n for: X1 + ... + Xn")
+  distribSample[1,2]=nvar
+  distribSample[2,1]=glabel("Number of simulations")
+  distribSample[2,2]=sampleSize
+  visible(distribSample)=TRUE
+  
+  tmp = gframe("update", container = group)
+  add(tmp,displayFunc)
 
-tmp = gframe("update", container = group)
-add(tmp,displayFunc)
+  addSpring(group)
 
-addSpring(group)
-
-buttonGroup=ggroup(container=group)
+  buttonGroup=ggroup(container=group)
   if(missing(container))
-    gbutton("cancel", container=buttonGroup, handler = function(h,...) dispose(container))
-addSpring(buttonGroup)
-gbutton("update",container=buttonGroup, handler=updatePlot)
+      gbutton("cancel", container=buttonGroup,
+              handler = function(h,...) dispose(container))
+  addSpring(buttonGroup)
+  gbutton("update",container=buttonGroup, handler=updatePlot)
 
-add(BigGroup, ggraphics())
+  add(BigGroup, ggraphics())
+
+  visible(container) <- TRUE
   invisible(BigGroup)
 }

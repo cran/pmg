@@ -2,16 +2,9 @@
 %\VignetteIndexEntry{pmg}
 %\vignettepackage{pmg}
 
-\usepackage{times}              % for fonts
 \usepackage[]{geometry}
-\usepackage{mathptm}            % for math fonts type 1
 \usepackage{graphicx}           % for graphics files
-%%\usepackage{floatflt}           % for ``floating boxes''
-%%\usepackage{index}
-\usepackage{relsize}            % for relative size fonts
-\usepackage{amsmath}            % for amslatex stuff
-\usepackage{amsfonts}           % for amsfonts
-\usepackage{url}                % for \url,
+\usepackage{hyperref}                % for \url,
 \usepackage{color}
 \usepackage{fancyvrb}
 \usepackage{fancyhdr}
@@ -38,7 +31,7 @@
 
 \begin{document}
 \title{pmg}
-\author{John Verzani\\\url{pmgRgui@gmail.com}}
+\author{John Verzani}
 \maketitle
 
 [This vignette is in need of updating!]
@@ -54,18 +47,14 @@ package of Michael Lawrence. This package is available for all three
 major platforms: windows, Mac OS X, and Unix/X11.  the
 \RCode{gWidgets} interface is used to simplify the development of
 interactive GUIS, this in turn requires the \RCode{gWidgetsRGtk2}
-package.~\footnote{In theory, but not practice, the usage of
-  \RCode{gWidgets} would allow \RCode{pmg} to use a different GUI
-  toolkit, the \RCode{gWidgetsrJava} package does not have enough
-  features in it currently to do so.}
-
+package.
 
 \section{Installing pmg}
 If the requisite packages are available on CRAN, then installation can
 be done with a single command such as
-\begin{Soutput}
+\begin{verbatim}
 > install.packages("pmg", dependencies=TRUE)
-\end{Soutput}
+\end{verbatim}
 or from the toolbar. Mac users may need to add \RCode{source=TRUE}.
 
 
@@ -76,9 +65,9 @@ system. If not, the home page for \RCode{RGtk2} has some directions
 
 For users of windows, a script is available to download the gtk
 libraries and install \RCode{pmg}. Run the command
-\begin{Sinput}
-> source("http://www.math.csi.cuny.edu/pmg/installpmg.R")
-\end{Sinput}
+\begin{verbatim}
+source("http://www.math.csi.cuny.edu/pmg/installpmg.R")
+\end{verbatim}
 to initiate the script.
 
 For users with the \RCode{iplots} or \RCode{reshape} packages
@@ -89,14 +78,12 @@ installed, there are extra dialogs appearing under the menu bar.
 The GUI uses the \RPackage{gWidgets} API. The \RPackage{gWidgets}
 package offers the promise of a toolkit-independent API for writing
 interactive GUIs. If more than one toolkit implementation is
-installed, a menu for selection will be shown. It is likely that
-\RPackage{pmg} will only work well using the \RPackage{gWidgetsRGtk2}
-implementation
+installed, a menu for selection will be shown. 
 
 The GUI is started as follows.
-\begin{Soutput}
-> library(pmg)
-\end{Soutput}
+\begin{verbatim}
+library(pmg)
+\end{verbatim}
 
 To restart the GUI, the command \RFunc{pmg} can be issued. With the
 Windows operating system it is best to minimize the parent R GUI as it
@@ -170,16 +157,16 @@ right these are:
   name. This popup is not bound to the column header, but rather the
   column contents. Click once in a column, then right click to see it.
 
-  A right-mouse popup on the notebook tab holding the name allows you to save, close,
-  or rename the sheet.
+  A right-mouse popup on the notebook tab holding the name allows you
+  to save, close, or rename the sheet.
 
   The sheets with the names \verb+*scratch:#*+ are treated
   differently. The non-empty individual columns are saved as data
-  vectors. Otherwise a saved sheet is saved  as a data frame.
+  vectors. Otherwise a saved sheet is saved as a data frame.
 
-  Dropping an appropriate variable on the open button will open a new tab
-  with that variable's contents displayed. Whereas, clicking the open
-  button opens a dialog allowing the selection of a data frame.
+  Dropping an appropriate variable on the open button will open a new
+  tab with that variable's contents displayed. Whereas, clicking the
+  open button opens a dialog allowing the selection of a data frame.
 
   
 \item[Dialogs] 
@@ -205,13 +192,13 @@ right these are:
   
 
   The static dialogs are illustrated by the sample dialog appearing in
-  Figure~\ref{fig:pmg-gui-sample-dialog}. Most, but not all, of the dialogs
-  have the same behavior described below. There are areas to enter
-  information, and when enough values are specified, the ``ok'' button
-  sends the appropriate command to the ``Commands'' tab area to be evaluated.
-  Unlike the dynamic dialogs, the value is only updated when the
-  ``ok'' button is clicked.  Empty values are ignored. Values may
-  need to be quoted. 
+  Figure~\ref{fig:pmg-gui-sample-dialog}. Most, but not all, of the
+  dialogs have the same behavior described below. There are areas to
+  enter information, and when enough values are specified, the ``ok''
+  button sends the appropriate command to the ``Commands'' tab area to
+  be evaluated.  Unlike the dynamic dialogs, the value is only updated
+  when the ``ok'' button is clicked.  Empty values are ignored. Values
+  may need to be quoted.
 
  
 
@@ -255,7 +242,7 @@ the ``generic'' dialogs described above, there are some that have
 their own window. For example to load a data set so that it is visible
 in the variable browser the ``Load data set...''  menu item opens up a
 dialog for this. Other dialogs are available for loading an installed
-package, installing a package from  CRAN, sourcing a file, saving a
+package, installing a package from CRAN, sourcing a file, saving a
 file, etc.
 
 
@@ -271,8 +258,7 @@ file, etc.
 The dialog from ``Data::Univariate Summaries::quantile'' is new as of
 version 0.9-24. It is a possible prototype for some student-friendly
 dialogs along the lines of the dynamic summaries dialog. For students
-there is also a collection of teaching demos under the ``Plots''
-menu. 
+there is also a collection of teaching demos under the ``Plots'' menu.
 
 Graphs can be handled by the default device, through the plot notebook
 (Figure~\ref{fig:pmg-gui-plotnotebook-dialog}) which is opened when
@@ -282,9 +268,6 @@ once. The currently selected tab, should also be the current device.
 (Using both the plot notebook and the Lattice Explorer can lead to
 confusion, as the current device is where the new figure is drawn, and
 this may not be the desired device.)
-
-The ``help'' toolbar item opens up a help page browser, allowing
-access to R's help system. 
 
 
 \section{A few sample tasks}
@@ -299,9 +282,12 @@ Let's see how to make boxplots of the \RCode{MPG.highway} variable
 broken up by the number of \RCode{Cylinders} in the data set
 \RCode{Cars93} of the \RCode{MASS} package. The first task is to load
 the data set. Of course, you might think:
-\begin{Soutput}
-> library(MASS); boxplot(MPG.highway ~ Cylinders, Cars93)
-\end{Soutput}
+
+\begin{verbatim}
+library(MASS)
+boxplot(MPG.highway ~ Cylinders, Cars93)
+\end{verbatim}
+
 but we are interested in doing this through the GUI.
 
 First we load the \RCode{MASS} package using the ``Load package''
@@ -359,7 +345,7 @@ the 3 cylinder cars shown.
 \end{figure}
 
 If you scroll through the levels of \RCode{Cylinder} using the arrow
-keys, the boxplot in the Lattice Explorer will be  redrawn each time
+keys, the boxplot in the Lattice Explorer will be redrawn each time
 using only the visible data.
 
 
@@ -367,23 +353,6 @@ Dragging a column header onto a widget only works for the dynamic
 widgets and only with \RCode{gWidgetsRGtk2}. There are currently two
 other dynamic widgets: one for numeric summaries of a data set and
 another for linear models.
-
-\subsection{using \RPackage{iplots}}
-
-If the \RPackage{iplots} package is installed the dialog found under
-\RCode{Plots::iplots} can also be used to dynamically adjust a graphic
-to a mouse click. To see how the highway mileage varies with the
-number of cylinders involves the following steps: open the dialog
-under \RCode{Plots::iplots}. Then add the data frame
-\RCode{Cars93}. Then select the variable \RCode{MPG.highway} on the
-left and then under \RCode{New plot} select the \RCode{ihist}
-choice. The histogram is created. Now select the \RCode{Cylinders}
-variable, but this time make a bar plot using \RCode{ibar}. Another
-graphic is opened. Clicking on one of the bars in the barplot causes
-those cases to highlight in the histogram. One can also select cases
-by dragging over multiple values of the bar plot.
-
-There are plans for a similar interface to \RPackage{rggobi}.
 
 \subsection{Finding numeric summaries of a data set}
 \label{sec:numeric-summaries}
@@ -424,66 +393,22 @@ instantly propogate.
 
 \section{Adding to the GUI}
 
-Currently there are only a few ways to add to the GUI.
-
-\subsection{Adding a dialog}
 
 The \RCode{pmg.add(widget, label)} function is used to add a dialog to
 the main notebook. It will add to the third tab. The widget is some
 \RCode{gWidget} instance. It should not already be attached to some
 container. For example, this will add a ``hello world'' tab
-\begin{Sinput}
-> pmg.add(glabel("Hello world"), label="Hi")
-\end{Sinput}
 
-\subsection{Creating a dialog to collect a function's arguments}
+\begin{verbatim}
+pmg.add(glabel("Hello world"), label="Hi")
+\end{verbatim
 
-The \RCode{pmg.gw(lst,title=NULL)} function is used to add a dialog to collect a
-function's argument. The function calls \RCode{ggenericwidget} to
-create the dialog. The \RCode{lst} argument can be a list, a function
-name or a function. In the last two cases the dialog is formed from
-looking at the values returned from \RCode{formals()}. The title can
-be set or will be guessed if not present.
-
-
-\subsection{Adding to the menubar}
-
-The \RCode{pmg.addMenubar(menulist,...)} function can be used to add new top-level
-entries  to the menu bar. It takes a list that gets passed to
-\RCode{gmenu} as its argument. 
-
-For example, a new entry can be defined as follows
-\begin{Sinput}
-> lst = list()
-> lst$MenuEntry$hi$handler = function(h,...) pmg.add(glabel("HelloWorld"), label="Hi")
-> lst$MenuEntry$mean$handler = function(h,...) pmg.gw("mean")
-> pmg.addMenubar(lst)
-\end{Sinput}
-
-
-
-
-User-defined menus can be added when the GUI is started. At startup
-pmg looks for a variable \RCode{pmg.user.menu} which if present should
-be a list with named components, each again a list as above. See the
-help page for \RFunc{gmenu} of \RCode{gWidgets} for more details on
-its structure.
 
 \section{TODO}
-The pmg GUI could be improved in many ways. A few obvious ones are
-\begin{itemize}
-\item More ability to customize the GUI. For instance, there is no way
-  to change the fonts, there is only a primitive way to change the
-  menubar, ...
-\item The bulk of the dialogs are pretty basic -- they just collect
-  arguments to pass to a function call. Some more dynamic widgets
-  would be useful. The dialog for quantiles is meant to be a template
-  for some student-friendly dialogs.
-\item It would be great to have some sort of report writing tool. The
-  new Maple interface or the Mathematica notebook interface might be a
-  good choice for interacting with R.
-\end{itemize}
 
+There are many places for improvement, but none likely to happen
+without an outside push. The iNZight project pushes the ideas of this
+GUI quite a bit farther.
 
 \end{document}
 

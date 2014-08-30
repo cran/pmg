@@ -277,8 +277,8 @@ dSummaryDialog = function(container=NULL) {
     out = capture.output(eval(parse(text=command), envir=envir))
 
     dispose(summaryArea)
-    add(summaryArea, command,font.attr=c("monospace","blue"))
-    add(summaryArea, out, font.attr=c("monospace"))
+    add(summaryArea, command,font.attr=c(style="monospace",color="blue"))
+    add(summaryArea, out, font.attr=c(style="monospace"))
 
   }
   
